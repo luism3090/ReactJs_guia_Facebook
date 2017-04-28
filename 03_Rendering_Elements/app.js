@@ -4,7 +4,7 @@
 
 // Los elementos son los bloques de construcción más pequeños de las aplicaciones de React.
 
-// Un elemento describe lo que desea ver en la pantallas:
+// Un elemento describe lo que desea ver en la pantalla:
 
 const element1 = <h1>Hello, World</h1>;
   
@@ -14,7 +14,7 @@ const element1 = <h1>Hello, World</h1>;
 // Nota: 
 // Uno podría confundir elementos con un concepto más ampliamente conocido de "componentes". 
 // Introduciremos los componentes en la siguiente sección. 
-// Los elementos son los componentes que están "hechos de", 
+// Los componentes son los que estan hechos de elementos  
 // y le animamos a leer esta sección antes de saltar adelante.
 
 
@@ -40,7 +40,7 @@ ReactDOM.render(element2,document.getElementById('root1'));
 // Muestra "Hello World" en la página.
 
 
-// Actualización del elemento renderizado #
+// ------------------ Actualización del elemento renderizado # -----------------------
 
 
 // Los elementos de react son inmutables. Una vez que cree un elemento, no podrá cambiar sus hijos o atributos.
@@ -81,7 +81,7 @@ setInterval(reloj,1000);
 // necesarias para llevar el DOM al estado deseado.
 
 
-// Puede verificarlo mediante la inspección del último ejemplo con las herramientas del navegador:
+// Puede verificarlo mediante la inspección del último ejemplo (reloj tictac) con las herramientas del navegador:
 
 // Aunque creamos un elemento que describe todo el árbol de la interfaz de usuario en cada reloj, 
 // sólo el nodo de texto cuyo contenido ha cambiado se actualiza por React DOM.
