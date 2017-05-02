@@ -1,3 +1,5 @@
+// Componentes y Props 
+
 
 // Los componentes le permiten dividir la interfaz de usuario en piezas independientes y reutilizables,
 //  y pensar en cada pieza de forma aislada.
@@ -171,11 +173,11 @@ function Comentario(props)
 
 const datosComentario = 
 {
-	text:"React Js",
+	text:"React Js una libreria increible para javascrip",
 	date: new Date(),
 	author:
 	{
-		 name: 'Anónimo',
+		 name: 'Luis Molina',
     	 avatarUrl: "http://devstickers.com/assets/img/pro/cew3.png"
 	} 
 	
@@ -204,28 +206,262 @@ ReactDOM.render	(	<Comentario
 
 // En primer lugar, vamos a extraer la imagen o que es lo mismo el Avatar:
 
-function Avatar(props)
-{
-	const avatar = 	(
-						<img className="Avatar" 
-							src={props.algo}
-							alt={props.algo}
-						/>
-						,
-						document.getElementById('cont4')
-					);
-}
+// function Avatar(props) {
+//   return (
+//     <img className="Avatar"
+//       src={props.user.avatarUrl}
+//       alt={props.user.name}
+//     />
+//   );
+// }
 
 // El Avatar no necesita saber que está siendo rendereado dentro de un Comentario. 
-// Esta es la razón por la que hemos dado a su prop un nombre más genérico: el user en lugar de autor.
+// Esta es la razón por la que hemos dado a su prop un nombre más genérico: user en lugar de autor.
+
+// Recomendamos nombrar las props desde el punto de vista del componente en lugar 
+// del contexto en el que se está utilizando.
+
+
+// Ahora podemos simplificar el componente Comentario un poco:
+
+
+// function Comment(props) {
+//   return (
+//     <div className="Comment">
+//       <div className="UserInfo">
+//         <Avatar user={props.author} />
+//         <div className="UserInfo-name">
+//           {props.author.name}
+//         </div>
+//       </div>
+//       <div className="Comment-text">
+//         {props.text}
+//       </div>
+//       <div className="Comment-date">
+//         {formatDate(props.date)}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// A continuación, extraeremos un componente UserInfo que renderiza un Avatar junto al nombre del usuario:
+
+
+// function UserInfo(props) {
+//   return (
+//     <div className="UserInfo">
+//       <Avatar user={props.user} />
+//       <div className="UserInfo-name">
+//         {props.user.name}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// Esto nos permite simplificar aún más el comentario:
+
+
+
+// function Comment(props) {
+//   return (
+//     <div className="Comment">
+//       <UserInfo user={props.author} />
+//       <div className="Comment-text">
+//         {props.text}
+//       </div>
+//       <div className="Comment-date">
+//         {formatDate(props.date)}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// Ejemplos : 
+
+
+// ------------  Ejemplo de la libreria de facebook de react js ---------------
+
+
+function formatDate(date) {
+  return date.toLocaleDateString();
+}
+
+function Avatar(props) {
+  return (
+    <img className="Avatar"
+         src={props.user.avatarUrl}
+         alt={props.user.name} />
+  );
+}
+
+function UserInfo(props) {
+  return (
+    <div className="UserInfo">
+      <Avatar user={props.user} />
+      <div className="UserInfo-name">
+        {props.user.name}
+      </div>
+    </div>
+  );
+}
+
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <UserInfo user={props.author} />
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
+
+const comment = {
+  date: new Date(),
+  text: 'I hope you enjoy learning React!',
+  author: {
+    name: 'Hello Kitty',
+    avatarUrl: 'https://www.mastermagazine.info/termino/wp-content/uploads/Usuario-Icono.jpg'
+  }
+};
+
+
+ReactDOM.render(
+  <Comment
+    date={comment.date}
+    text={comment.text}
+    author={comment.author} />,
+  document.getElementById('cont4')
+);
+
+
+// Extracción de componentes puede parecer un trabajo tedioso al principio, pero tener una paleta de componentes 
+// reutilizables vale la pena en aplicaciones más grandes. Una buena regla general es que si una parte de
+// su interfaz de usuario se utiliza varias veces (Button, Panel, Avatar) O es bastante complejo por sí mismo 
+//  (App, FeedStory, Comment)  Es un buen candidato para ser un componente reutilizable.
+
+
+
+
+// ---------------  Mi ejemplo creado por mi mismo    --------------------
+
+
+
+function UserAvatar(props)
+{
+	const userAvatar = ( 	<div className="userInfo-avatar">
+								<img 	src={props.user.url}
+										width={props.user.alto} 
+										height={props.user.ancho}
+								/>
+							</div>
+						);
+
+	return userAvatar;
+}
+
+function UserInfo(props)
+{
+	const userInfo = 	(	<div>
+								<div className="userInfo-nombre">
+									<span>{props.user.nombre}</span>
+								</div>
+								<div className="userInfo-comentario">
+									<span>{props.user.texto}</span>
+								</div>
+							</div>
+							
+						);
+
+	return userInfo;
+}
+
+function UserFecha(props)
+{
+	const userFecha = 	( 
+							<div className="userInfo-fecha">
+								<span>{props.user.toLocaleDateString()}</span>
+							</div>
+						);
+
+	return userFecha;
+}
+
+var datosUser=
+{
+	avatar:
+	{
+		url:"https://www.mastermagazine.info/termino/wp-content/uploads/Usuario-Icono.jpg",
+		alto:"100px",
+		ancho:"100px"
+	},
+	comentario:
+	{
+		nombre:"Luis Molina",
+		texto:"Aprendiendo React Js",
+	},
+	fecha:new Date()
+}
+
+function UserComentario(props)
+{
+	const userComentario = (
+								<div className="userInfo">
+									<UserAvatar user={datosUser.avatar} />
+									<UserInfo user={datosUser.comentario} />
+									<UserFecha user={datosUser.fecha} />
+								</div>
+							);
+
+	return userComentario;
+}
+
+ReactDOM.render(<UserComentario />,document.getElementById('cont5'))
 
 
 
 
 
+// ---------------------------  Los props son de sólo lectura ---------------------------
+
+
+// Ya sea que declare un componente como una función o una clase, nunca debe modificar sus propios props.
+// Considere esta función sum:
+
+function suma(a,b)
+{
+	return a + b;
+}
+
+
+// Estas funciones se llaman pure "puras" porque no intentan cambiar sus entradas, y siempre devuelven el mismo 
+// resultado para las mismas entradas.
 
 
 
+// Por el contrario, esta función es impura porque cambia su propia entrada:
+
+
+function withdraw(account,amount)
+{
+	account.total -= amount;
+}
+
+
+// React es bastante flexible pero tiene una sola regla estricta:
+// Todos los componentes React deben actuar como funciones puras con respecto a sus props.
+
+
+// Por supuesto, las interfaces de usuario de aplicaciones son dinámicas y cambian con el tiempo. 
+// En la siguiente sección, presentaremos un nuevo concepto de estado "state". 
+// State permite que los componentes React modifiquen su salida en el tiempo en respuesta a las 
+// acciones del usuario, las respuestas de la red y cualquier otra cosa, sin violar esta regla.
 
 
 
