@@ -144,7 +144,7 @@ ReactDOM.render	(<div>
 // No tenga miedo de dividir los componentes en componentes más pequeños.
 
 
-// Por ejemplo, considere este componente de comentario:
+// Por ejemplo, considere este componente de Comentario:
 
 
 function Comentario(props)
@@ -196,7 +196,7 @@ ReactDOM.render	(	<Comentario
 				)
 
 
-// Acepta user (un objeto), urlFoto (una cadena) y date (una fecha) como props, y describe un comentario
+// Acepta author (un objeto), urlFoto (una cadena) y date (una fecha) como props, y describe un comentario
 // en un sitio web de medios sociales.
 
 // Este componente puede ser difícil de cambiar debido a la anidación, y también es difícil 
@@ -341,7 +341,7 @@ ReactDOM.render(
 );
 
 
-// Extracción de componentes puede parecer un trabajo tedioso al principio, pero tener una paleta de componentes 
+// La Extracción de componentes puede parecer un trabajo tedioso al principio, pero tener una paleta de componentes 
 // reutilizables vale la pena en aplicaciones más grandes. Una buena regla general es que si una parte de
 // su interfaz de usuario se utiliza varias veces (Button, Panel, Avatar) O es bastante complejo por sí mismo 
 //  (App, FeedStory, Comment)  Es un buen candidato para ser un componente reutilizable.
@@ -455,7 +455,7 @@ function withdraw(account,amount)
 
 
 // React es bastante flexible pero tiene una sola regla estricta:
-// Todos los componentes React deben actuar como funciones puras con respecto a sus props.
+// "Todos los componentes React deben actuar como funciones puras con respecto a sus props."
 
 
 // Por supuesto, las interfaces de usuario de aplicaciones son dinámicas y cambian con el tiempo. 

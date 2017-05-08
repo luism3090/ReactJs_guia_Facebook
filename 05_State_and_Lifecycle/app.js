@@ -388,7 +388,7 @@ ReactDOM.render(<Clock4 />
 
 // this.state.comment = 'Hello';
 
-// En su lugar, utilice setState ():
+// En su lugar, utilice setState():
 
 //Correcto 
 
@@ -411,9 +411,11 @@ ReactDOM.render(<Clock4 />
 
 // Error
 
-this.setState({
-	counter:this.state.counter + this.props.increment
-})
+// this.setState({
+
+// 	counter: this.state.counter + this.props.increment
+
+// })
 
 
 // Para solucionarlo, utilice una segunda forma de setState() que acepte una función en lugar de un objeto.
@@ -439,53 +441,203 @@ this.setState({
 
 
 
-//  ---------------------------- Las actualizaciones de estado son funcionadas ------------------------------
+//  ---------------------------- Las actualizaciones de estado son fusionadas ------------------------------
 
 
 // Cuando llama a setState(), React fusiona el objeto que proporciona en el estado actual. Por ejemplo, 
 // su estado puede contener varias variables independientes:
 
 
- constructor(props) {
-    super(props);
-    this.state = {
-      posts: [],
-      comments: []
-    };
-  }
+ // constructor(props) {
+ //    super(props);
+ //    this.state = {
+ //      posts: [],
+ //      comments: []
+ //    };
+ //  }
 
 
 // A continuación, puede actualizarlos independientemente con llamadas setState() independientes:
 
-componentDidMount() {
-    fetchPosts().then(response => {
-      this.setState({
-        posts: response.posts
-      });
-    });
+// componentDidMount() 
+// {
+//     fetchPosts().then(response => 
+//     {
+// 	      this.setState(
+// 	      {
+// 	        posts: response.posts
+// 	      });
+//     });
 
-    fetchComments().then(response => {
-      this.setState({
-        comments: response.comments
-      });
-    });
-  }
+//     fetchComments().then(response => 
+//     {
+// 		  this.setState(
+// 		  {
+// 		    comments: response.comments
+// 		  });
+
+//     });
+//  }
 
 // La fusión es superficial, por lo que this.setState({comments}) deja this.state.posts intacto,
 //  pero reemplaza completamente this.state.comments.
 
 
 
+// -------------------------- Los flujos de datos hacia abajo -------------------------------------------------
+
+
+// Ni los componentes padre ni hijo pueden saber si un determinado componente tiene estado o no tiene estado,
+//  y no debería importarles si se define como una función o una clase.
+
+// Esta es la razón por la cual el estado se llama a menudo local o encapsulado. No es accesible a ningún 
+// componente distinto del que posee y lo configura.
+
+// Un componente puede elegir pasar su estado como props a sus componentes hijos:
+
+// <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+
+// Esto también funciona para los componentes definidos por el usuario:
+
+// <FormattedDate date={this.state.date} />
+
+// El componente FormattedDate recibirá la fecha en sus props y no sabría si vino del estado de Clock, 
+// de los props de Clock, o se escribio a mano:
+
+// function FormattedDate(props) {
+//   return <h2>It is {props.date.toLocaleTimeString()}.</h2>;
+// }
+
+
+//ejemplo:
+
+function FormattedDate(props)
+{
+	return(
+			<h2>Son las {props.date.toLocaleTimeString()} </h2>
+			)
+}
+
+class Clock5 extends React.Component
+{
+	constructor(props)
+	{
+		super(props);
+		this.state = {date: new Date()}
+	}
+
+	componentDidMount()
+	{
+		var timeID = setInterval(()=> this.tick(),1000)
+	}
+
+	componentWillUnmount()
+	{
+		clearInterval(timeID);
+	}
+
+	tick()
+	{
+		this.setState(
+						{
+							date:new Date()
+						}
+					 );
+	}
+
+	render()
+	{
+		return(
+					<div>
+						<h1>
+							Hola mundo
+						</h1>
+						<FormattedDate date={this.state.date} />
+					</div>
+			   )
+	}
+}
+
+ReactDOM.render(<Clock5 />,document.getElementById('cont6'));
 
 
 
+// Esto se denomina comúnmente flujo de datos "de arriba hacia abajo" o "unidireccional". Cualquier estado
+//  es siempre propiedad de algún componente específico, y cualquier información o UI derivada de ese estado
+//   sólo puede afectar a los componentes "debajo" de ellos en el árbol.
+
+// Si uno imagina un árbol de componentes como una cascada de props, el estado de cada componente es 
+// como una fuente de agua adicional que se une a él en un punto arbitrario, pero también fluye hacia abajo.
 
 
 
+// Para mostrar que todos los componentes están realmente aislados, podemos crear un componente App que genere tres
+// <Clock>s
 
 
+function FormateDate2(props)
+{
+	return (
+				<h2>Son las {props.date.toLocaleTimeString()} </h2>
+			)
+}
+
+class Clock10 extends React.Component
+{
+	constructor(props)
+	{
+		super(props)
+		this.state = {date: new Date()}
+	}
+
+	componentDidMount()
+	{
+		var timeID = setInterval(() => this.tick(),1000);
+	}
+
+	componentWillUnmount()
+	{
+		clearInterval(timeID);
+	}
+
+	tick()
+	{
+		this.setState({
+						date: new Date()
+					  })
+	}
+
+	render()
+	{
+		return(
+					<div>
+						<h1>Hola mundo react</h1>
+						<FormateDate2 date={this.state.date}/>
+					</div>
+			   )
+	}
+
+}
+
+function App()
+{
+	return(
+			<div>
+				<Clock10 />
+				<Clock10 />
+				<Clock10 />
+			</div>
+		  );
+}
+
+ReactDOM.render(<App />,document.getElementById("cont7"))
 
 
+// Cada Clock10 configura su propio temporizador y se actualiza de forma independiente.
+
+// En las aplicaciones de React, si un componente tiene estado o no, se considera un detalle de 
+// implementación del componente que puede cambiar con el tiempo. Puede utilizar componentes 
+// sin estado dentro de componentes con estado y viceversa.
 
 
 
