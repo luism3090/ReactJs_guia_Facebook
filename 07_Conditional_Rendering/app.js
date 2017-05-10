@@ -86,18 +86,130 @@ ReactDOM.render(
 
 // Variables del elementos
 
-// Puede utilizar variables para almacenar elementos. Esto puede ayudarle a hacer una parte del componente 
-// condicionalmente mientras que el resto de la salida no cambia.
+// Puede utilizar variables para almacenar elementos. Esto puede ayudarte a renderear condicionalmente 
+// una parte de el componente mientras que el resto de la salida no cambia.
 
 // Considere estos dos nuevos componentes que representan los botones de cerrar sesion y de inicio de sesión:
 
+// function LoginButton(props) {
+//   return (
+//     <button onClick={props.onClick}>
+//       Login
+//     </button>
+//   );
+// }
+
+// function LogoutButton(props) {
+//   return (
+//     <button onClick={props.onClick}>
+//       Logout
+//     </button>
+//   );
+// }
+
+// En el ejemplo siguiente, crearemos un componente con estado llamado LoginControl.
+
+// esto rendeará ya sea <LoginButton /> o <LogoutButton /> Dependiendo de su estado actual.
+
+// ademas rendeará un <Greeting /> del ejemplo anterior:
+
+
+class ControlLogin extends React.Component 
+{
+	constructor(props)
+	{
+		super(props);
+
+
+		 this.cerrarSesion = this.cerrarSesion.bind(this);
+    	this.iniciarSesion = this.iniciarSesion.bind(this);
+		this.state = {estaLogueado: false}
+
+	}
+
+	cerrarSesion()
+	{
+		this.setState({estaLogueado: false});
+	}
+
+	iniciarSesion()
+	{
+		this.setState({estaLogueado: true});
+	}
+
+	render()
+	{
+		var estaLogueado = this.state.estaLogueado;
+		let boton=null;
+		if(this.state.estaLogueado)
+		{
+			boton = <BotonSiEstaLogueado onClick={this.cerrarSesion}/>
+		}
+		else
+		{
+			boton = <BotonNoEstaLogueado onClick={this.iniciarSesion}/>
+		}
+
+		return(
+				<div>
+					<Saludar estaLogueado={this.state.estaLogueado}/>
+					{boton}
+				</div>
+			)
+
+	}
 
 
 
 
 
+}
 
 
+function SaludoSiEstaLogueado(props)
+	{
+		return(
+					<h1>Bienvenido</h1>
+				)
+	}
+
+function SaludoNoEstaLogueado(props)
+{
+	return(
+				<h1>Por favor inicia sesión</h1>
+			)
+}
+
+function BotonSiEstaLogueado(props)
+{
+	return(
+				<button onClick={props.onClick}>Cerrar sesión</button>
+			)
+}
+
+function BotonNoEstaLogueado(props)
+{
+	return(
+				<button onClick={props.onClick}>Iniciar sesión</button>
+			)
+}
+
+function Saludar(props)
+{
+	
+
+	if(props.estaLogueado)
+	{
+		return <SaludoSiEstaLogueado />
+	}
+	else
+	{
+		return <SaludoNoEstaLogueado />
+	}
+
+}
+
+ReactDOM.render(<ControlLogin />,document.getElementById('cont3'))
 
 
 

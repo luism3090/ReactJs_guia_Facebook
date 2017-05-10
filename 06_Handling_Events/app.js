@@ -72,7 +72,7 @@
  		this.state = {isToggleOn:true};
 
 
- 		// This binding is necessary to make `this` work in the callback
+ 		// Esta sintaxis garantiza que `this` esté enlazada dentro de handleClick
  		this.handleClick = this.handleClick.bind(this);
 
  	}
