@@ -143,8 +143,43 @@ ReactDOM.render(<ListaNumeros2 arrayNums ={arrayNums2} />,document.getElementByI
 // ----------------------- Extracción de componentes con keys -----------------------------------
 
 
+// Las keys sólo tienen sentido en el contexto de la array circundante.
+
+// Por ejemplo, si extrae un componente ListItem, debe mantener la key en los elementos del <ListItem /> en 
+// el array en lugar de en el elemento <li> raiz en el propio ListItem
 
 
+// Ejemplo: Uso incorrecto de keys
+
+
+function ListItem(props)
+{
+	const value = props.value;
+
+	return (
+				<li key={value.toString()} >{value}</li>
+			)
+}
+
+function NumberList2(props)
+{
+
+	const numbers =  props.numbers;
+	const listItems = numbers.map((number) => 
+			<ListItem value={number} />
+		)
+
+	return (
+				<div>
+					{listItems}
+				</div>
+			)
+	
+}
+
+const numbers3 = [10,9,8,7,6];
+
+ReactDOM.render(<NumberList2 numbers={numbers3}/>,document.getElementById('cont4'))
 
 
 
