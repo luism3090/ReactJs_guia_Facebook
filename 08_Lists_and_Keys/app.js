@@ -170,9 +170,9 @@ function NumberList2(props)
 		)
 
 	return (
-				<div>
+				<ul>
 					{listItems}
-				</div>
+				</ul>
 			)
 	
 }
@@ -181,6 +181,8 @@ const numbers3 = [10,9,8,7,6];
 
 ReactDOM.render(<NumberList2 numbers={numbers3}/>,document.getElementById('cont4'))
 
+
+// Ejemplo: Uso correcto de las keys
 
 
 
