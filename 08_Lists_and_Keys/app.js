@@ -156,7 +156,9 @@ function ListItem(props)
 {
 	const value = props.value;
 
-	return (
+
+	return (     
+				// ¡Incorrecto! No es necesario especificar la clave aquí:
 				<li key={value.toString()} >{value}</li>
 			)
 }
@@ -166,6 +168,7 @@ function NumberList2(props)
 
 	const numbers =  props.numbers;
 	const listItems = numbers.map((number) => 
+		// ¡Incorrecto! La clave debería haber sido especificada aquí:
 			<ListItem value={number} />
 		)
 
@@ -179,37 +182,191 @@ function NumberList2(props)
 
 const numbers3 = [10,9,8,7,6];
 
-ReactDOM.render(<NumberList2 numbers={numbers3}/>,document.getElementById('cont4'))
+ReactDOM.render(<NumberList2 numbers={numbers3}/>,document.getElementById('cont4'));
 
 
 // Ejemplo: Uso correcto de las keys
 
+function ListaItem(props)
+{
+	return(
+				<li>{props.value}</li>
+			)
+}
+
+function ListaNumeros3(props)
+{
+	const numbers = props.numbers;
+
+	const listaNumeros = numbers.map((number) => 
+			<ListaItem key={number.toString()} value={number} />
+		)
+
+	return(
+				<ul>
+					{listaNumeros}
+				</ul>
+			)
+}
+
+ const numbers4 = [10,20,30,40,50];
+
+ReactDOM.render(<ListaNumeros3 numbers={numbers4} />,document.getElementById('cont5'));
+
+
+// Una buena regla general es que los elementos dentro de la funcion map() necesitan keys.
 
 
 
+// -------------------- Las llaves deben ser únicas entre hermanos ------------------------------
 
 
+// Las claves utilizadas dentro de los arrays deben ser únicas entre sus hermanos. Sin embargo,
+//  no necesitan ser globalmente únicas. Podemos utilizar las mismas claves cuando producimos 
+//  dos arrays diferentes:
+
+// Mi ejemplo: 
+
+function Bloger(props)
+{	
+	const posts = props.posts;
+	const tmpList = posts.map((list) => 
+			<li key={list.id} >{list.title}</li>
+		);
 
 
+	const tmpPosts = posts.map((post) =>
+			<div>
+				<h3>{post.title}</h3>
+				<p>{post.content}</p>
+			</div>
+		);
+
+	return( 	<div>
+					{tmpList}
+					{tmpPosts}
+				</div>
+			 );
+}
+
+const posts = 	[
+					{
+						id: '1', title: 'Hola mundo', content: 'Bienvenido a ReactJs'
+					 },
+					 {
+					 	id:'2', title: 'Instalacion', content: 'Tu puedes instalar React con npm'
+					 }
+				]
 
 
+ReactDOM.render(<Bloger posts={posts} />,document.getElementById('cont6'));
 
 
+// Ejemplo de la documentacion de ReactJs de facebook
+
+function Blog(props) {
+  const sidebar = (
+    <ul>
+      {props.posts.map((post) =>
+        <li key={post.id}>
+          {post.title}
+        </li>
+      )}
+    </ul>
+  );
+  const content = props.posts.map((post) =>
+    <div key={post.id}>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
+    </div>
+  );
+  return (
+    <div>
+      {sidebar}
+      {content}
+    </div>
+  );
+}
+
+const posts1 = [
+  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+];
+ReactDOM.render(
+  <Blog posts={posts1} />,
+  document.getElementById('cont7')
+);
 
 
+// Las claves sirven como una sugerencia para REACT pero no se pasan a sus componentes.
+// Si necesitas el mismo valor en su componente, pasalas explícitamente como un prop con un nombre diferente:
 
 
+// const content = posts.map((post) =>
+//   <Post
+//     key={post.id}
+//     id={post.id}
+//     title={post.title} />
+// );
 
 
+// Con el ejemplo anterior, el componente Post puede leer props.id, pero no props.key.
 
 
+// --------------------------- Incrustación de mapa() en JSX # ------------------------
 
 
+// En los ejemplos anteriores declaramos una variable separada listItems y la incluimos en JSX:
 
 
+// function NumberList(props) {
+//   const numbers = props.numbers;
+//   const listItems = numbers.map((number) =>
+//     <ListItem key={number.toString()}
+//               value={number} />
+//   );
+//   return (
+//     <ul>
+//       {listItems}
+//     </ul>
+//   );
+// }
+
+// JSX permite incrustar cualquier expresión en llaves para que podamos en línea el resultado map():
+
+function ListItem (props)
+{
+	return (
+				<li>{props.value}</li>
+			)
+	 
+}
+
+function NumbersList6(props)
+{
+	const list = props.numbers;
+
+	return (	<ul>
+					{
+						list.map(	
+									(number) =>
+									<ListItem key={number.toString()} value={number} />
+								)
+					}
+				</ul>
+			)
+}
+
+const numbers6 = [1,2,3,4,5];
+
+ReactDOM.render(<NumbersList6 numbers={numbers6}/>,document.getElementById('cont8'))
 
 
-
+// A veces esto resulta en un código más claro, pero este estilo también puede ser abusado. 
+// Al igual que en JavaScript, depende de usted decidir si vale la pena extraer una variable
+//  para facilitar la lectura.
+// Tenga en cuenta que si el cuerpo map() está demasiado anidado, podría ser un buen momento 
+// para extraer un componente.
 
 
 
