@@ -36,9 +36,9 @@ function MsjHervirAgua(props)
 	
 	if(props.celsius >= 100)
 	{
-		return <h2>El aguar SI se va a hervir</h2>
+		return <h4>El agua SI se va a hervir</h4>
 	}
-	return <h2>El agua NO se va a hervir</h2>
+	return <h4>El agua NO se va a hervir</h4>
 }
 
 
@@ -132,7 +132,7 @@ ReactDOM.render(
 //tambien añadiremos una priedad 'prop' llamada scala que puede ser "c" o "f":
 
 
-// Mi ejemplo Version 1 hecho por mi mismo
+// Mi ejemplo hecho por mi mismo
 
 const tipoTemperatura = {
 							c:'Celsius',
@@ -192,7 +192,7 @@ ReactDOM.render(
 );
 
 
-// ejemplo de la documentacion de REact js de facebook
+// Ejemplo de la documentacion de REact js de facebook
 
 const scaleNames = {
   c: 'Celsius',
@@ -218,6 +218,7 @@ class TemperatureInput extends React.Component {
         <legend>Enter temperature in {scaleNames[scale]}:</legend>
         <input value={temperature}
                onChange={this.handleChange} />
+
       </fieldset>
     );
   }
@@ -243,11 +244,12 @@ ReactDOM.render(
 // Tenemos dos entradas ahora, pero cuando ingresas la temperatura en una de ellas, la otra no 
 // se actualiza. Esto contradice nuestro requisito: queremos mantenerlos sincronizados.
 
-// Tampoco podemos mostrar el BoilingVerdict de la Calculator2. La Calculator2 no conoce la temperatura 
-// actual porque está oculta dentro del TemperatureInput
+// Tampoco podemos mostrar el BoilingVerdict desde el componente Calculator2. Ya que el componente
+//  Calculator2 no conoce la temperatura actual porque está oculta dentro del componente 
+// TemperatureInput
 
 
-// ----------------------------- Escribir funciones de conversión ----------------------------
+// ----------------------------- Escribiendo funciones de conversión ----------------------------
 
 
 // Primero, escribiremos dos funciones para convertir de Celsius a Fahrenheit y viceversa:
@@ -262,8 +264,8 @@ ReactDOM.render(
 // }
 
 
-// Estas dos funciones convierten los números. Vamos a escribir otra función que toma una temperatura 
-// de cadena y una función de convertidor como argumentos y devuelve una cadena. 
+// Estas dos funciones convierten números. Vamos a escribir otra función que toma un string temperatura 
+//  y una función de convertidor como argumentos y devuelve una cadena. 
 // La usaremos para calcular el valor de una entrada basada en la otra entrada.
 
 // function tryConvert(temperature, convert) {
