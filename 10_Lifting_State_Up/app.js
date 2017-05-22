@@ -288,14 +288,28 @@ ReactDOM.render(
 
 // Actualmente, ambos componentes de TemperatureInput mantienen independientemente sus valores en el estado local:
 
+// class TemperatureInput extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleChange = this.handleChange.bind(this);
+//     this.state = {temperature: ''};
+//   }
+
+//   handleChange(e) {
+//     this.setState({temperature: e.target.value});
+//   }
+
+//   render() {
+//     const temperature = this.state.temperature;
+// }
+
 // Sin embargo, queremos que estas dos entradas estén sincronizadas entre sí. 
 // Cuando actualizamos la entrada Celsius, la entrada Fahrenheit debe reflejar la temperatura 
 // convertida, y viceversa.
 
-
-// En React, el estado compartido se logra moviéndolo hasta el antepasado común más cercano de los
+//  En React, el estado compartido se logra moviéndolo hasta el antepasado común más cercano de los
 //  componentes que lo necesitan. Esto se denomina "lifting state up" o "levantamiento de estado hacia arriba".
-//   Removeremos el estado local del TemperatureInput y lo moveremos a la Calculator.
+//  Removeremos el estado local del TemperatureInput y lo moveremos a Calculator.
 
 // Si la Calculator posee el estado compartido, se convierte en la "source of truth" o "fuente de verdad"
 //  para la temperatura actual en ambas entradas. Puede instruir a ambos a tener valores que
