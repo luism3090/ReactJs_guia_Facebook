@@ -81,6 +81,8 @@ class Calculadora extends React.Component
 ReactDOM.render(<Calculadora />,document.getElementById('cont1'))
 
 
+
+
 // Ejemplo de la documentacion de React Js de facebook
 
 function BoilingVerdict(props) {
@@ -244,8 +246,8 @@ ReactDOM.render(
 // Tenemos dos entradas ahora, pero cuando ingresas la temperatura en una de ellas, la otra no 
 // se actualiza. Esto contradice nuestro requisito: queremos mantenerlos sincronizados.
 
-// Tampoco podemos mostrar el BoilingVerdict desde el componente Calculator2. Ya que el componente
-//  Calculator2 no conoce la temperatura actual porque está oculta dentro del componente 
+// Tampoco podemos mostrar los elementos html del componente BoilingVerdict desde el componente Calculator2.
+ // Ya que el componente  Calculator2 no conoce la temperatura actual porque está oculta dentro del componente 
 // TemperatureInput
 
 
@@ -311,7 +313,7 @@ ReactDOM.render(
 //  componentes que lo necesitan. Esto se denomina "lifting state up" o "levantamiento de estado hacia arriba".
 //  Removeremos el estado local del TemperatureInput y lo moveremos a Calculator.
 
-// Si la Calculator posee el estado compartido, se convierte en la "source of truth" o "fuente de verdad"
+// 	Si Calculator posee el estado compartido, se convierte en la "source of truth" o "fuente de verdad"
 //  para la temperatura actual en ambas entradas. Puede instruir a ambos a tener valores que
 //   sean consistentes entre sí. Dado que los props de ambos componentes de TemperatureInput provienen 
 //   del mismo componente Calculator primario, las dos entradas estarán siempre sincronizadas.
@@ -319,17 +321,17 @@ ReactDOM.render(
 // Veamos cómo funciona esto paso a paso.
 
 // Primero, reemplazaremos this.state.temperature con this.props.temperature en el componente TemperatureInput
-// Por ahora, vamos a pretender que this.props.temperature ya exista, aunque tendremos que pasarlo 
-// de la Calculator en el futuro:
+// Por ahora, vamos a hacer como si  this.props.temperature ya existiera, aunque tendremos que pasarlo 
+// a Calculator en el futuro:
 
 // render() {
 //     // Before: const temperature = this.state.temperature;
 //     const temperature = this.props.temperature;
 
 
-// Sabemos que los props son de sólo lectura. Cuando la temperature estaba en el estado local, 
+// Sabemos que los props son de sólo lectura. Cuando la temperatura estaba en el estado local, 
 // el componente TemperatureInput podría llamar a this.setState() para cambiarlo. Sin embargo, ahora que la 
-// temperature viene del padre como un prop, el TemperatureInput no tiene control sobre él.
+// temperatura viene del padre como un prop, el TemperatureInput no tiene control sobre él.
 
 // // En React, esto se resuelve generalmente haciendo un componente "controlado". Al igual que los  
 // elementos de entra <input> del DOM aceptan propiedades "prop" tanto para "value" y como para onChange,
@@ -347,12 +349,45 @@ ReactDOM.render(
 // de  temperature  o onTemperatureChange  en componentes personalizados. Podríamos haberles llamado
 // de cualquier otra forma, como nombrarlos value y onChange que es una convención común.
 
-// La propiedad "prop" de onTemperatureChange se proporcionará junto con el prop de temperature 
-//  por el componente calculador padre. Manejará el cambio modificando su propio estado local, 
+// La propiedad "prop" onTemperatureChange se proporcionará junto con el prop temperature 
+//  por el componente calculator padre. Esto Manejará el cambio modificando su propio estado local, 
 //  re-renderizando ambas entradas con los nuevos valores. 
 //  Veremos la nueva implementación de la Calculator muy pronto.
 
+// Antes de sumergirnos en los cambios en la Calculator, vamos a recapitular nuestros cambios en el 
+// componente TemperatureInput. Hemos eliminado el estado local de él, y en vez de leer 
+// this.state.temperature, ahora leemos this.props.temperature.  En lugar de llamar a this.setState() 
+// cuando queremos hacer un cambio, ahora llamamos this.props.onTemperatureChange(), 
+// que será proporcionado por la el componenete Calculator:
 
+
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+    const temperature = this.props.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+// Ahora pasemos al componente Calculator.
+
+// Almacenaremos la temperatura y la escala de la entrada actual en su estado local. 
+// Este es el estado que "lifted up" "levantó" de las entradas, y servirá como la "fuente de la verdad" para ambos.
 
 
 
