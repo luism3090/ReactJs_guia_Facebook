@@ -361,33 +361,57 @@ ReactDOM.render(
 // que será proporcionado por la el componenete Calculator:
 
 
-class TemperatureInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
+// class TemperatureInput extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleChange = this.handleChange.bind(this);
+//   }
 
-  handleChange(e) {
-    this.props.onTemperatureChange(e.target.value);
-  }
+//   handleChange(e) {
+//     this.props.onTemperatureChange(e.target.value);
+//   }
 
-  render() {
-    const temperature = this.props.temperature;
-    const scale = this.props.scale;
-    return (
-      <fieldset>
-        <legend>Enter temperature in {scaleNames[scale]}:</legend>
-        <input value={temperature}
-               onChange={this.handleChange} />
-      </fieldset>
-    );
-  }
-}
+//   render() {
+//     const temperature = this.props.temperature;
+//     const scale = this.props.scale;
+//     return (
+//       <fieldset>
+//         <legend>Enter temperature in {scaleNames[scale]}:</legend>
+//         <input value={temperature}
+//                onChange={this.handleChange} />
+//       </fieldset>
+//     );
+//   }
+// }
 
 // Ahora pasemos al componente Calculator.
 
 // Almacenaremos la temperatura y la escala de la entrada actual en su estado local. 
-// Este es el estado que "lifted up" "levantó" de las entradas, y servirá como la "fuente de la verdad" para ambos.
+// Este es el estado que se "lifted up" "levantó" de las entradas, y servirá como la "fuente de la verdad" 
+// para ambos.
+// Es la representación mínima de todos los datos que necesitamos conocer para poder renderear ambas entradas
+
+// Por ejemplo, si ingresamos 37 en la entrada Celsius, el estado del componente de Calculator será:
+
+// {
+//   temperature: '37',
+//   scale: 'c'
+// }
+
+
+// Si posteriormente editamos el campo Fahrenheit para ser 212, el estado de Calculator será:
+
+// {
+//   temperature: '212',
+//   scale: 'f'
+// }
+
+
+// Podríamos haber almacenado el valor de ambas entradas, pero resultó ser innecesario. 
+// Es suficiente para almacenar el valor de la entrada modificada más recientemente, y la escala que representa.
+// Podemos entonces inferir el valor de la otra entrada basado solamente en la temperatura y escala actuales.
+
+// Las entradas permanecen sincronizadas porque sus valores se calculan desde el mismo estado:
 
 
 
