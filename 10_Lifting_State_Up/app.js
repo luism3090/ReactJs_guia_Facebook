@@ -93,7 +93,9 @@ function BoilingVerdict(props) {
 }
 
 class Calculator extends React.Component {
-  constructor(props) {
+  	
+  constructor(props) 
+  {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.state = {temperature: ''};
@@ -414,24 +416,146 @@ ReactDOM.render(
 // Las entradas permanecen sincronizadas porque sus valores se calculan desde el mismo estado:
 
 
+const escala = {
+					f:'Farenheit',
+					c:'celsius'
+				}
+
+
+function AFarenheit(gradosCelsius)
+{
+	debugger;
+	return (gradosCelsius - 32 ) * 5 / 9; 
+}
+
+function ACelsius(gradosFarenheit)
+{
+	debugger;
+	return (gradosFarenheit * 9 / 5 ) + 32; 	
+}
+
+
+function convertirGrados(temperatura,conversion)
+{
+	debugger;
+	const tempPars = parseFloat(temperatura);
+	
+	if(Number.isNaN(tempPars))
+	{
+		return '';
+	}
+
+	const gradosConvert = conversion(tempPars);
+	gradosRedon =  Math.round(gradosConvert * 1000) / 1000;
+	return gradosRedon.toString();
+
+}
 
 
 
 
+function MsjGrados(props)
+{	
+	debugger;
+
+	if(props.grados >= 100)
+	{
+		return <h4>El agua se va a hervir</h4>
+	}
+	return <h4>El agua No se va a hervir</h4>
+}
 
 
 
 
+class TemplTemperatura extends React.Component
+{
+
+	
+	debugger;
+
+	constructor(props){
+		debugger;
+		super(props);
+
+		this.cambioTemperatura = this.cambioTemperatura.bind(this);
+	}
+
+	cambioTemperatura(event)
+	{
+		debugger;
+		this.props.onCambioTemperatura(event.target.value);
+	}
+
+	render()
+	{
+		debugger;
+		const tipo = this.props.escala;
+		const temperatura = this.props.temperatura;
+		return (
+					<div>
+						<fieldset>
+							<legend>Ingrese la temperatura en {escala[tipo]}</legend>
+							<input type="text" value={temperatura} onChange={this.cambioTemperatura}/>
+						</fieldset>
+					</div>
+				);
 
 
+	}
+
+}
 
 
+class CalcularTemperatura extends React.Component
+{
+	debugger;
 
+	constructor(props)
+	{
+		super(props);
 
+		debugger;
 
+		this.state  = { escala:'c', temperatura: '' }
 
+		this.cambioCelsius = this.cambioCelsius.bind(this);
+		this.cambioFarenheit = this.cambioFarenheit.bind(this);
 
+	}
 
+	cambioCelsius(temperatura)
+	{
+		debugger;
+		this.setState(escala:'c', temperatura);
+	}
 
+	cambioFarenheit(temperatura)
+	{
+		debugger;
+		this.setState(escala:'f', temperatura);
+	}
 
+	render()
+	{
+		debugger;
+		const escala = this.state.escala; 
+		const temperatura = this.state.temperatura;
+		const celsius =  escala === 'c' ? convertirGrados(temperatura,ACelsius) : temperatura;
+		const farenheit = escala === 'f' ? convertirGrados(temperatura,AFarenheit) : temperatura;
 
+		
+
+		return(	
+					<div>
+						<TemplTemperatura escala="c" temperatura={celsius} onCambioTemperatura={this.cambioCelsius} />
+						<TemplTemperatura escala="f" temperatura={farenheit} onCambioTemperatura={this.cambioFarenheit} />
+						<MsjGrados grados= {parseFloat(celsius)}  />
+					</div>
+			  )
+
+		
+	}
+}
+
+ReactDOM.render(<CalcularTemperatura />,document.getElementById('cont5'));
