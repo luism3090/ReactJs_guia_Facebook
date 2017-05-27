@@ -416,28 +416,31 @@ ReactDOM.render(
 // Las entradas permanecen sincronizadas porque sus valores se calculan desde el mismo estado:
 
 
-const escala = {
+
+// Ejemplo creado por mi mismo 
+
+
+const NombresEscala = {
 					f:'Farenheit',
 					c:'celsius'
 				}
 
+function ACelsius(gradosFarenheit)
+{
+	////debugger;
+	return (gradosFarenheit - 32 ) * 5 / 9; 
+}
 
 function AFarenheit(gradosCelsius)
 {
-	debugger;
-	return (gradosCelsius - 32 ) * 5 / 9; 
-}
-
-function ACelsius(gradosFarenheit)
-{
-	debugger;
-	return (gradosFarenheit * 9 / 5 ) + 32; 	
+	//debugger;
+	return (gradosCelsius * 9 / 5 ) + 32; 	
 }
 
 
 function convertirGrados(temperatura,conversion)
 {
-	debugger;
+	//debugger;
 	const tempPars = parseFloat(temperatura);
 	
 	if(Number.isNaN(tempPars))
@@ -446,17 +449,15 @@ function convertirGrados(temperatura,conversion)
 	}
 
 	const gradosConvert = conversion(tempPars);
-	gradosRedon =  Math.round(gradosConvert * 1000) / 1000;
+	const gradosRedon =  Math.round(gradosConvert * 1000) / 1000;
 	return gradosRedon.toString();
 
 }
 
 
-
-
 function MsjGrados(props)
 {	
-	debugger;
+	////debugger;
 
 	if(props.grados >= 100)
 	{
@@ -466,16 +467,12 @@ function MsjGrados(props)
 }
 
 
-
-
 class TemplTemperatura extends React.Component
 {
-
-	
-	debugger;
+	////debugger;
 
 	constructor(props){
-		debugger;
+		////debugger;
 		super(props);
 
 		this.cambioTemperatura = this.cambioTemperatura.bind(this);
@@ -483,19 +480,19 @@ class TemplTemperatura extends React.Component
 
 	cambioTemperatura(event)
 	{
-		debugger;
+		////debugger;
 		this.props.onCambioTemperatura(event.target.value);
 	}
 
 	render()
 	{
-		debugger;
+		//debugger;
 		const tipo = this.props.escala;
 		const temperatura = this.props.temperatura;
 		return (
 					<div>
 						<fieldset>
-							<legend>Ingrese la temperatura en {escala[tipo]}</legend>
+							<legend>Ingrese la temperatura en {NombresEscala[tipo]}</legend>
 							<input type="text" value={temperatura} onChange={this.cambioTemperatura}/>
 						</fieldset>
 					</div>
@@ -509,43 +506,41 @@ class TemplTemperatura extends React.Component
 
 class CalcularTemperatura extends React.Component
 {
-	debugger;
+	////debugger;
 
 	constructor(props)
 	{
 		super(props);
 
-		debugger;
-
-		this.state  = { escala:'c', temperatura: '' }
+		////debugger;
 
 		this.cambioCelsius = this.cambioCelsius.bind(this);
 		this.cambioFarenheit = this.cambioFarenheit.bind(this);
+
+		this.state  = { temperatura: '', escala: 'c'}
 
 	}
 
 	cambioCelsius(temperatura)
 	{
-		debugger;
-		this.setState(escala:'c', temperatura);
+		////debugger;
+		this.setState({escala:'c', temperatura});
 	}
 
 	cambioFarenheit(temperatura)
 	{
-		debugger;
-		this.setState(escala:'f', temperatura);
+		////debugger;
+		this.setState({escala:'f', temperatura});
 	}
 
 	render()
 	{
-		debugger;
+		//debugger;
 		const escala = this.state.escala; 
 		const temperatura = this.state.temperatura;
-		const celsius =  escala === 'c' ? convertirGrados(temperatura,ACelsius) : temperatura;
-		const farenheit = escala === 'f' ? convertirGrados(temperatura,AFarenheit) : temperatura;
-
+		const celsius  = escala === 'f' ? convertirGrados(temperatura,ACelsius) : temperatura;
+		const farenheit =  escala === 'c' ? convertirGrados(temperatura,AFarenheit) : temperatura;
 		
-
 		return(	
 					<div>
 						<TemplTemperatura escala="c" temperatura={celsius} onCambioTemperatura={this.cambioCelsius} />
@@ -559,3 +554,206 @@ class CalcularTemperatura extends React.Component
 }
 
 ReactDOM.render(<CalcularTemperatura />,document.getElementById('cont5'));
+
+
+
+// Ejemplo de la documentaion de ReactJs de facebook
+
+
+const scaleNames2 = {
+  c: 'Celsius',
+  f: 'Fahrenheit'
+};
+
+function toCelsius(fahrenheit) {
+	//debugger;
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function toFahrenheit(celsius) {
+	//debugger;
+  return (celsius * 9 / 5) + 32;
+}
+
+function tryConvert(temperature, convert) {
+	//debugger;
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+
+function BoilingVerdict(props) {
+  if (props.celsius >= 100) {
+    return <p>The water would boil.</p>;
+  }
+  return <p>The water would not boil.</p>;
+}
+
+class TemperatureInput2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+  	////debugger;
+    this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+  	//debugger;
+    const temperature = this.props.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames2[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+class Calculator5 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+    this.state = {temperature: '', scale: 'c'};
+  }
+
+  handleCelsiusChange(temperature) {
+  	////debugger;
+    this.setState({scale: 'c', temperature});
+  }
+
+  handleFahrenheitChange(temperature) {
+  	////debugger;
+    this.setState({scale: 'f', temperature});
+  }
+
+  render() {
+  	//debugger;
+    const scale = this.state.scale;
+    const temperature = this.state.temperature;
+    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+    const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+
+    return (
+
+      <div>
+        <TemperatureInput2
+          scale="c"
+          temperature={celsius}
+          onTemperatureChange={this.handleCelsiusChange} />
+        <TemperatureInput2
+          scale="f"
+          temperature={fahrenheit}
+          onTemperatureChange={this.handleFahrenheitChange} />
+        <BoilingVerdict
+          celsius={parseFloat(celsius)} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Calculator5 />,
+  document.getElementById('cont6')
+);
+
+
+// Ahora, sin importar la entrada que se edite, this.state.temperature y this.state.scale en el componente
+// Calculator5 se actualizan. Una de las entradas obtiene el valor tal como está, por lo que cualquier
+//  entrada de usuario se conserva, y el otro valor de entrada siempre se recalcula basado en él.
+
+
+// Repasemos lo que sucede cuando editas una entrada:
+
+
+// * React llama a la función especificada como onChange del <input> en el DOM . En nuestro caso, 
+// este es el método handleChange en el componente TemperatureInput.
+
+
+// * El método handleChange en el componente TemperatureInput llama a this.props.onTemperatureChange() 
+// con el nuevo valor deseado. Sus props, incluyendo onTemperatureChange, fueron proporcionados 
+// por su componente principal, Calculator5.
+
+// * Cuando se rendereó anteriormente, el componente Calculator5 se ha especificado que 
+// onTemperatureChange del Celsius TemperatureInput es el método handleCelsiusChange de Calculator5 
+// y onTemperatureChange del Fahrenheit TemperatureInput es el método handleFahrenheitChange de Calculator5.
+// Por lo tanto, cualquiera de estos dos métodos de Calculator5 se llama dependiendo de qué entrada 
+// hemos editado.
+
+
+// * React llama al método de renderizado del componente Calculator5 para saber cómo debe ser
+//  la interfaz de usuario. Los valores de ambas entradas se recalculan en función de la temperatura
+//   actual y de la escala activa. Aquí se realiza la conversión de la temperatura.
+
+
+// * React llama a los métodos de procesamiento de los componentes individuales de TemperatureInput
+//  con sus nuevos props especificados por Calculator5. Aprende lo que su interfaz de usuario 
+//  debe mostrar.
+
+// * React DOM actualiza el DOM para que coincida con los valores de entrada deseados. 
+//  La entrada que acabamos de editar recibe su valor actual, y la otra entrada se actualiza 
+//  a la temperatura después de la conversión.
+
+// Cada actualización pasa por los mismos pasos para que las entradas permanezcan sincronizadas.
+
+
+// -------------------- Lecciones aprendidas -----------------------------
+
+
+// Debe haber una sola "source of truth" "fuente de verdad" para cualquier dato que cambie 
+// en una aplicación React. Normalmente, el estado se agrega primero al componente que lo necesita 
+// para renderizar. Entonces, si otros componentes también lo necesitan, puede elevarlo 
+// hasta su antepasado común más cercano. En lugar de intentar sincronizar el estado entre los 
+// diferentes componentes, debe confiar en el flujo de datos "top-down data flow." "de arriba hacia abajo".
+
+// El estado de elevación implica la escritura de un código más "calificado" que los enfoques de 
+// enlace bidireccional, pero como un beneficio, se necesita menos trabajo para encontrar 
+// y aislar los errores. Puesto que cualquier estado "vive" en algún componente y ese componente 
+// solo puede cambiarlo, el area de superficie de error se reduce considerablemente. 
+// Además, puedes implementar cualquier lógica personalizada para rechazar o transformar la entrada de usuario.
+
+
+// Si algo se puede derivar de los props o del estado, probablemente no debería estar en el estado.
+// Por ejemplo, en lugar de almacenar tanto celsiusValue como fahrenheitValue, almacenamos sólo
+// la última temperatura editada y su escala. El valor de la otra entrada siempre se puede calcular
+// a partir de ellos en el método render(). Esto nos permite borrar o aplicar el redondeo al otro
+// campo sin perder precisión en la entrada del usuario.
+
+// Cuando vea algo malo en la interfaz de usuario, puede utilizar React Developer Tools para 
+// inspeccionar los props y desplazarse por el árbol hasta encontrar el componente responsable 
+// de actualizar el estado. Esto le permite rastrear los errores a su origen:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
