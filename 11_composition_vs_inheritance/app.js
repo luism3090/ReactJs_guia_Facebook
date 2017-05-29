@@ -112,40 +112,117 @@ ReactDOM.render(
 // En tales casos usted puede subir su propia convención en vez de usar a children :
 
 
-function SplitPane(props) 
+// function SplitPane(props) 
+// {
+//   return (
+//     		<div className="SplitPane">
+//       			<div className="SplitPane-left">
+//         			{props.left}
+//       			</div>
+//       			<div className="SplitPane-right">
+//         			{props.right}
+//       			</div>
+//     		</div>
+//   );
+// }
+
+
+// function App() 
+// {
+//   return (
+//     		<SplitPane
+//   			    left={<Contacts />}
+//       			right={<Chat />} 
+//       		/>
+//   );
+// }
+
+
+// Ejemplo hecho por mi mismo 
+
+
+function ContainerChat()
+{
+  return <div className="chat" ></div>;
+}
+
+function ContainerContactos()
+{
+  return <div className="contactos" ></div>;
+}
+
+function ContainerPrincipal(props)
 {
   return (
-    		<div className="SplitPane">
-      			<div className="SplitPane-left">
-        			{props.left}
-      			</div>
-      			<div className="SplitPane-right">
-        			{props.right}
-      			</div>
-    		</div>
+            <div className="container-main">
+              
+                <div className="contChats" >
+                   {props.chats}
+                </div>
+
+                <div className="contContacts" >
+                  {props.contacts}
+                </div>
+
+            </div>
+        )
+}
+
+ReactDOM.render(<ContainerPrincipal chats={<ContainerChat />} 
+                                    contacts={<ContainerContactos />} 
+                />
+                ,
+                document.getElementById('cont3'));
+
+
+
+// Ejemplo de la documentacion de React Js de facebook
+
+
+function Contacts() {
+  return <div className="contactos" />;
+}
+
+function Chat() {
+  return <div className="chat" />;
+}
+
+function SplitPane(props) {
+  return (
+    <div className="contenedor">
+      <div className="contChats">
+        {props.left}
+      </div>
+      <div className="contContacts">
+        {props.right}
+      </div>
+    </div>
   );
 }
 
-
-function App() 
-{
+function App() {
   return (
-    		<SplitPane
-  			    left={<Contacts />}
-      			right={<Chat />} 
-      		/>
+    <SplitPane
+      left={
+        <Chat />
+      }
+      right={
+        <Contacts />
+      } />
   );
 }
 
+ReactDOM.render(
+  <App />,
+  document.getElementById('cont4')
+);
 
 
+// Los elementos React como <Contacts />  y <Chat /> son sólo objetos, por lo que se pueden pasar como props,
+//  como cualquier otro dato.
 
 
-
-
-
-
-
+// ----------------------------------------- Specialization -------------------------------------------------
 
 
 
