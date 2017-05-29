@@ -715,6 +715,7 @@ ReactDOM.render(
 // hasta su antepasado común más cercano. En lugar de intentar sincronizar el estado entre los 
 // diferentes componentes, debe confiar en el flujo de datos "top-down data flow." "de arriba hacia abajo".
 
+
 // El estado de elevación implica la escritura de un código más "calificado" que los enfoques de 
 // enlace bidireccional, pero como un beneficio, se necesita menos trabajo para encontrar 
 // y aislar los errores. Puesto que cualquier estado "vive" en algún componente y ese componente 
@@ -728,17 +729,10 @@ ReactDOM.render(
 // a partir de ellos en el método render(). Esto nos permite borrar o aplicar el redondeo al otro
 // campo sin perder precisión en la entrada del usuario.
 
+
 // Cuando vea algo malo en la interfaz de usuario, puede utilizar React Developer Tools para 
 // inspeccionar los props y desplazarse por el árbol hasta encontrar el componente responsable 
 // de actualizar el estado. Esto le permite rastrear los errores a su origen:
-
-
-
-
-
-
-
-
 
 
 
