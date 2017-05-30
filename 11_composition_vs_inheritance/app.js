@@ -222,7 +222,15 @@ ReactDOM.render(
 //  como cualquier otro dato.
 
 
-// ----------------------------------------- Specialization -------------------------------------------------
+// ----------------------------------------- Especialización -------------------------------------------------
+
+
+// A veces pensamos en los componentes como "casos especiales" de otros componentes. Por ejemplo, podríamos decir que un
+//  WelcomeDialog es un caso especial de Dialog.
+
+
+// En React, esto también se logra por la composición, donde un componente más "específico" renderea a uno más "genérico" 
+// y lo configura con props:
 
 
 
