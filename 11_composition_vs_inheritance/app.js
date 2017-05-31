@@ -233,18 +233,233 @@ ReactDOM.render(
 // y lo configura con props:
 
 
+// Ejemplo creado por mi mismo 
+
+function CompRaiz(props)
+{
+	return(
+			<div className={"border-" + props.color }>
+				 {props.children}
+			</div>
+		  )
+}
+
+function CompMsjs(props)
+{
+	return(
+			<CompRaiz color="blue">
+				<h1 className="contBienvenida">
+					 {props.msjBienvenida}
+				</h1>
+				<h4 className="contMsj">
+					 {props.msj}
+				</h4>
+			</CompRaiz>
+		  )
+}
+
+function CompPrincipal()
+{
+	return (
+				<CompMsjs msjBienvenida="Bienvenido" msj="Gracias por su visita a nuestra página" />
+			)
+}
+
+
+ReactDOM.render(<CompPrincipal />,document.getElementById("cont5"));
 
 
 
+// Ejemplo de la documentacion de ReactJs de Facebook 
+
+
+function FancyBorder(props) {
+  return (
+    <div className={'FancyBorder FancyBorder-' + props.color}>
+      {props.children}
+    </div>
+  );
+}
+
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">
+        {props.title}
+      </h1>
+      <p className="Dialog-message">
+        {props.message}
+      </p>
+    </FancyBorder>
+  );
+}
+
+function WelcomeDialog() {
+  return (
+    <Dialog
+      title="Welcome"
+      message="Thank you for visiting our spacecraft!" />
+  );
+}
+
+ReactDOM.render(
+  <WelcomeDialog />,
+  document.getElementById('cont6')
+);
+
+
+// La composición funciona igual de bien para los componentes definidos como clases:
+
+
+// Ejemplo creado por mi mismo 
+
+function CompRaiz2(props)
+{
+	  return(
+				<div className={"border-"+props.color} >
+					{props.children}
+				</div>
+			)
+}
+
+function CompMensajes(props)
+{
+	  return(
+	  			<CompRaiz2 color="blue">
+		  			<h1 className="tituloMsj">
+		  				{props.msjtTitulo}
+		  			</h1>
+		  			<h4 className="contMsj" >
+		  				{props.contMsj}
+		  			</h4>
+		  			 {props.children}
+	  			</CompRaiz2>
+			)
+}
+
+class CompLogin extends React.Component
+{
+	constructor(props)
+	{
+		super(props);
+
+		this.state = ({login:''});
+
+		this.cambioLogin = this.cambioLogin.bind(this);
+		this.logearse = this.logearse.bind(this);
+	}
+
+	cambioLogin(e)
+	{
+		this.setState({login:e.target.value});
+	}
+
+	logearse()
+	{
+		const nombre = this.state.login;
+
+		alert('Bienvenido, '+nombre);
+	}
+
+	render()
+	{
+	  return(
+	  			<CompMensajes 	msjtTitulo="Bievenido a nuestro sitio"
+	  							contMsj="¿Cómo deberíamos referirnos a usted?"
+	  			 >
+	  				<input 	value={this.state.login}
+	  						onChange={this.cambioLogin}
+	  						
+	  				/>
+	  				<input type="button" value="Aceptar" onClick={this.logearse} />
+	  			</CompMensajes>
+			)
+	}
 
 
 
+}
+
+
+ReactDOM.render(<CompLogin />,document.getElementById('cont7'));
 
 
 
+// Ejemplo de la documentacion de ReactJs de Facebook 
 
 
 
+function FancyBorder(props) {
+  return (
+    <div className={'FancyBorder FancyBorder-' + props.color}>
+      {props.children}
+    </div>
+  );
+}
+
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">
+        {props.title}
+      </h1>
+      <p className="Dialog-message">
+        {props.message}
+      </p>
+      {props.children}
+    </FancyBorder>
+  );
+}
+
+class SignUpDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
+    this.state = {login: ''};
+  }
+
+  render() {
+    return (
+      <Dialog title="Mars Exploration Program"
+              message="How should we refer to you?">
+        <input value={this.state.login}
+               onChange={this.handleChange} />
+        <button onClick={this.handleSignUp}>
+          Sign Me Up!
+        </button>
+      </Dialog>
+    );
+  }
+
+  handleChange(e) {
+    this.setState({login: e.target.value});
+  }
+
+  handleSignUp() {
+    alert(`Welcome aboard, ${this.state.login}!`);
+  }
+}
+
+ReactDOM.render(
+  <SignUpDialog />,
+  document.getElementById('cont8')
+);
+
+
+// ------------------------------ Entonces, ¿qué pasa con la herencia? -----------------------------------------
+
+
+// En Facebook, utilizamos React en miles de componentes y no hemos encontrado casos de uso en los que recomendaríamos 
+// crear jerarquías de herencia de componentes.
+
+// Los props y la composición le brindan toda la flexibilidad necesaria para personalizar la apariencia y el comportamiento 
+// de un componente de una manera explícita y segura.
+
+// Recuerde que los componentes pueden aceptar objetos arbitrarios, incluyendo valores primitivos, elementos React o funciones.
+
+// Si desea reutilizar la funcionalidad que no sea de interfaz de usuario entre los componentes, le sugerimos extraerlo 
+// en un módulo JavaScript independiente. Los componentes pueden importarlo y utilizar esa función, objeto o una clase, sin extenderlo.
 
 
 
