@@ -50,7 +50,34 @@
 // lo que significa que el trabajo de separar la interfaz de usuario en componentes es a menudo trivial.
 // Basta con romperlo en componentes que representan exactamente una pieza de su modelo de datos.
 
-https://facebook.github.io/react/img/blog/thinking-in-react-components.png
+// https://facebook.github.io/react/img/blog/thinking-in-react-components.png
+
+// Verás aquí que tenemos cinco componentes en nuestra sencilla aplicación. Hemos puesto en cursiva los datos 
+// que cada componente representa.
+
+// 1. FilterableProductTable (orange): Contiene la totalidad del ejemplo
+
+// 2. SearchBar (blue): Recibe todas las entradas de usuario
+
+// 3. ProductTable (green): Muestra y filtra la recopilación de datos basada en la entrada del usuario
+
+// 4. ProductCategoryRow (turquoise): Muestra un encabezado para cada categoría
+
+// 5. ProductRow (red): Muestra una fila para cada producto
+
+
+// Si observa ProductTable, verá que el encabezado de la tabla (que contiene las etiquetas "Name" y "Price") 
+// no es su propio componente. Esta es una cuestión de preferencia, y hay un argumento que debe hacerse de cualquier manera. 
+// Para este ejemplo, lo dejamos como parte de ProductTable porque es parte de la prestación de la recopilación de
+// datos que es responsabilidad de ProductTable. Sin embargo, si esta cabecera crece para ser compleja 
+// (es decir, si tuviéramos que añadir affordances para la clasificación), sin duda tendría sentido para hacer de 
+// este su propio componente ProductTableHeader.
+
+Ahora que hemos identificado los componentes en nuestro simulacro, vamos a organizarlos en una jerarquía. Esto es facil.
+ Los componentes que aparecen dentro de otro componente en el simulacro deben aparecer como un hijo en la jerarquía:
+
+
+
 
 
 
