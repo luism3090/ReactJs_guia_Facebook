@@ -73,9 +73,17 @@
 // (es decir, si tuviéramos que añadir affordances para la clasificación), sin duda tendría sentido para hacer de 
 // este su propio componente ProductTableHeader.
 
-Ahora que hemos identificado los componentes en nuestro simulacro, vamos a organizarlos en una jerarquía. Esto es facil.
- Los componentes que aparecen dentro de otro componente en el simulacro deben aparecer como un hijo en la jerarquía:
+// Ahora que hemos identificado los componentes en nuestro Mockup, vamos a organizarlos en una jerarquía. Esto es facil.
+//  Los componentes que aparecen dentro de otro componente en el Mockup deben aparecer como un hijo en la jerarquía:
 
+// FilterableProductTable
+// 	SearchBar
+// 	ProductTable
+// 		ProductCategoryRow
+// 		ProductRow
+
+
+// ------------------------- Paso 2: Construir una versión estática en React  -----------------------------------
 
 
 

@@ -46,6 +46,8 @@ class Calculadora extends React.Component
 {
 	constructor(props)
 	{
+		//debugger
+
 		super(props);
 
 		this.state = ({celsius:''});
@@ -56,6 +58,7 @@ class Calculadora extends React.Component
 
 	cambioGrados(event)
 	{
+		//debugger
 		const newGradosCelsius = event.target.value;
 
 		this.setState({celsius: newGradosCelsius})
@@ -63,6 +66,8 @@ class Calculadora extends React.Component
 
 	render()
 	{
+		//debugger
+
 		const celsius = this.state.celsius;
 
 		return(
@@ -77,6 +82,8 @@ class Calculadora extends React.Component
 			  )
 	}
 }
+
+
 
 ReactDOM.render(<Calculadora />,document.getElementById('cont1'))
 
