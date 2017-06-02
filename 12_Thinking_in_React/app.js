@@ -77,27 +77,238 @@
 //  Los componentes que aparecen dentro de otro componente en el Mockup deben aparecer como un hijo en la jerarquía:
 
 // FilterableProductTable
-// 	SearchBar
-// 	ProductTable
-// 		ProductCategoryRow
-// 		ProductRow
+//  SearchBar
+//  ProductTable
+//      ProductCategoryRow
+//      ProductRow
 
 
-// ------------------------- Paso 2: Construir una versión estática en React  -----------------------------------
+// ------------------------- Paso 2: Construir una versión estática de React  -----------------------------------
+
+
+// Ejemplo creado por mi mismo 
+
+
+class CompBusqueda extends React.Component
+{
+	
+	render()
+	{
+		return	(
+					<div>
+						<div>
+							<input type="text"  placeholder="Buscar... " />
+						</div>
+						<div>
+						<input type="checkbox" name="prStock" value="a" /> 
+							Mostrar solo productos en stock 
+						</div>
+					</div>
+				)
+	}
+} 
+
+class CompTitulosTablaProductos extends React.Component
+{
+	render()
+	{
+		return(
+					<tr className="titleProduct" ><td colSpan='2'><strong>{this.props.producto.categoria}</strong></td></tr>
+				)
+	}
+}
+class CompRowsTablaProductos extends React.Component
+{
+	
+	render()
+	{
+		let row;
+
+		if(this.props.producto.stocked)
+		{
+			row = (
+					<tr>
+						<td>{this.props.producto.nombre}</td>
+						<td>{this.props.producto.precio}</td>
+					</tr>
+					)
+		}
+		else
+		{
+			row = (
+					<tr>
+						<td style={{color: 'red'}} ><strong>{this.props.producto.nombre}</strong></td>
+						<td style={{color: 'red'}}><strong>{this.props.producto.precio}</strong></td>
+					</tr>
+					)
+		}
+
+		return(
+				row
+				)
+	}
+}
+class CompTablaProductos extends React.Component
+{
+	render()
+	{
+		const rowsProductos = [];
+		let categoria = null;
+
+		this.props.productos.forEach(function(producto,index)
+		{
+			if(producto.categoria !== categoria )
+			{
+				rowsProductos.push(<CompTitulosTablaProductos producto={producto} key={producto.categoria} />);
+			}
+			rowsProductos.push(<CompRowsTablaProductos producto={producto} key={producto.nombre} />);
+
+			categoria = producto.categoria;
+			 
+		})
+
+
+		return	(
+					<table>
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Precio</th>
+							</tr>
+						</thead>
+						<tbody>
+							{rowsProductos}
+						</tbody>
+					</table>
+				)
+	}
+}
+class CompRaiz extends React.Component
+{
+	
+	render()
+	{
+
+		return	(
+					<div>
+						<CompBusqueda />
+						<CompTablaProductos productos={this.props.productos} />
+					</div>
+				)
+		
+	}
+}
+const productos = [
+					  {categoria:"Sporting Goods", precio:'$49.99', stocked:true, nombre:"Football"},
+					  {categoria: 'Sporting Goods', precio: '$9.99', stocked: true, nombre: 'Baseball'},
+					  {categoria: 'Sporting Goods', precio: '$29.99', stocked: false, nombre: 'Basketball'},
+					  {categoria: 'Electronics', precio: '$99.99', stocked: true, nombre: 'iPod Touch'},
+					  {categoria: 'Electronics', precio: '$399.99', stocked: false, nombre: 'iPhone 5'},
+					  {categoria: 'Electronics', precio: '$199.99', stocked: true, nombre: 'Nexus 7'}
+				  ]
+ReactDOM.render(<CompRaiz productos={productos} />,document.getElementById('cont1'));
 
 
 
 
 
 
+// Ejemplo de la documentacion de React Js de facebook 
+
+
+class ProductCategoryRow extends React.Component {
+  render() {
+    return <tr><th colSpan="2">{this.props.category}</th></tr>;
+  }
+}
+
+class ProductRow extends React.Component {
+  render() {
+    var name = this.props.product.stocked ?
+      this.props.product.name :
+      <span style={{color: 'red'}}>
+        {this.props.product.name}
+      </span>;
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{this.props.product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable extends React.Component {
+  render() {
+    var rows = [];
+    var lastCategory = null;
+    this.props.products.forEach(function(product) {
+      if (product.category !== lastCategory) {
+        rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
+      }
+      rows.push(<ProductRow product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class SearchBar extends React.Component {
+  render() {
+    return (
+      <form>
+        <input type="text" placeholder="Search..." />
+        <p>
+          <input type="checkbox" />
+          {' '}
+          Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class FilterableProductTable extends React.Component {
+  render() {
+    return (
+      <div>
+        <SearchBar />
+        <ProductTable products={this.props.products} />
+      </div>
+    );
+  }
+}
+
+
+var PRODUCTS = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+ 
+ReactDOM.render(
+  <FilterableProductTable products={PRODUCTS} />,
+  document.getElementById('cont2'));
 
 
 
-
-
-
-
-
+// Ahora que tiene su jerarquía de componentes, es hora de implementar su aplicación. La manera más fácil es 
+// construir una versión que tome su modelo de datos y renderiza la interfaz de usuario, pero no tiene interactividad. 
+// Lo mejor es desacoplar estos procesos porque la construcción de una versión estática requiere mucho escribir y 
+// no pensar, y la adición de interactividad requiere mucha reflexión y no mucha escritura. Veremos por qué.
 
 
 
