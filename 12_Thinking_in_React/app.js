@@ -306,9 +306,104 @@ ReactDOM.render(
 
 
 // Ahora que tiene su jerarquía de componentes, es hora de implementar su aplicación. La manera más fácil es 
-// construir una versión que tome su modelo de datos y renderiza la interfaz de usuario, pero no tiene interactividad. 
-// Lo mejor es desacoplar estos procesos porque la construcción de una versión estática requiere mucho escribir y 
-// no pensar, y la adición de interactividad requiere mucha reflexión y no mucha escritura. Veremos por qué.
+// construir una versión que tome su modelo de datos y renderice la interfaz de usuario, y que no
+// tenga interactividad.  Lo mejor es desacoplar estos procesos porque la construcción de una versión 
+// estática requiere mucho escribir y no pensar, y añadirle  interactividad requiere 
+// mucho estar pensando y no mucha escritura. Veremos por qué.
+
+// Para crear una versión estática de la aplicación que procesa su modelo de datos, tendra que crear componentes 
+// que reutilicen otros componentes y pasen datos mediante props. Los props son una manera 
+// de pasar los datos de padres a hijos. Si está familiarizado con el concepto de estado, no use 
+// el estado en absoluto para construir esta versión estática. El estado se reserva sólo para la 
+// interactividad, es decir, los datos que cambian con el tiempo. Dado que se trata de una versión 
+// estática de la aplicación, no la necesita.
+
+// Puede construir de arriba hacia abajo o de abajo hacia arriba. Es decir, puede iniciar con la 
+// construcción de los componentes más arriba en la jerarquía (es decir, comenzando con FilterableProductTable)
+//  o con los más bajos en él (ProductRow). En los ejemplos más sencillos, suele ser más fácil 
+//  ir de arriba abajo, y en proyectos más grandes, es más fácil ir de abajo hacia arriba y escribir
+//   pruebas a medida que construyes
+
+
+// Al final de este paso, tendrá una biblioteca de componentes reutilizables que rendearan su modelo de datos. 
+// Los componentes solo tendrán un metodo render() ya que esta es una versión estática de su aplicación. 
+// El componente en la parte superior de la jerarquía (FilterableProductTable) tomará su modelo de datos 
+// como un prop. Si se realiza un cambio en su modelo de datos subyacente y vuelve a llamar a ReactDOM.render(),
+//  la interfaz de usuario se actualizará. Es fácil ver cómo se actualiza su interfaz de usuario y dónde 
+//  hacer cambios, ya que no hay nada complicado sucediendo. "one-way data flow " 
+//  "El flujo de datos unidireccional de React " 
+//  (también llamado enlace unidireccional) (also called one-way binding) mantiene todo lo modular y rápido.
+
+
+// Simplemente consulte los documentos React
+// https://facebook.github.io/react/docs/hello-world.html
+//  si necesita ayuda para ejecutar este paso.
+
+
+// -------------------- Una breve pausa: Props vs State  ----------------------------------
+
+// Hay dos tipos de datos "modelo" en React: "props y estado". "props and state" Es importante entender la distinción 
+// entre los dos; puede leer "the official React docs" en el enlace de abajo  si no está seguro de cuál es la diferencia.
+// --> https://facebook.github.io/react/docs/state-and-lifecycle.html 
+
+
+// ----- Paso 3: Identificar la representación mínima (pero completa) del estado de la interfaz de usuario ----------
+
+// Para que tu interfaz de usuario sea interactiva, debes ser capaz de activar cambios en el modelo de 
+// datos subyacente. React hace esto fácil con el estado.
+
+// Para crear correctamente tu aplicación, primero debes pensar en el conjunto mínimo de estados mutables que 
+// tu aplicación necesitara. La clave aquí es secar: No te repitas. Calcule la representación mínima absoluta 
+// del estado que su aplicación necesita y calcule todo lo que necesita bajo demanda. Por ejemplo, si está 
+// creando una lista TODO, mantenga un array de los elementos TODO alrededor; No mantenga una variable 
+// de estado independiente para el conteo. En su lugar, cuando desea renderear el conteo de TODO, simplemente 
+// tome el tamaño del array de elementos TODO.
+
+// Piense en todas las piezas de datos en nuestra aplicación de ejemplo. Tenemos:
+
+// * La lista original de productos
+// * El texto de búsqueda introducido por el usuario
+// * El valor de la casilla de verificación
+// * La lista filtrada de productos
+
+// Veamos a través de cada uno y averiguaemos cuál es el estado. Simplemente haga tres preguntas sobre 
+// cada pieza de datos:
+
+// 1. ¿Se pasa de un padre a través de los props? Si es así, probablemente no es estado.
+
+// 2. ¿Se mantiene sin cambios con el tiempo? Si es así, probablemente no es estado.
+
+// 3. ¿Se puede calcular en función de cualquier otro estado o props en su componente? 
+// Si es así, no es estado.
+
+
+// La lista original de productos se pasa como props, por lo que no es estado. El texto de búsqueda 
+// y la casilla de verificación parecen ser estados ya que cambian con el tiempo y no se pueden 
+// calcular de nada. Y finalmente, la lista filtrada de productos no es estado porque puede ser calculada
+// combinando la lista original de productos con el texto de búsqueda y el valor de la casilla de verificación.
+
+// Así que finalmente, nuestro estado es:
+
+// * El texto de búsqueda introducido por el usuario
+// * El valor de la casilla de verificación
+
+
+// -------------------- Paso 4: Identifique dónde debe vivir su estado -----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
