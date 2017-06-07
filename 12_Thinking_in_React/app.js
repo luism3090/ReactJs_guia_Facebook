@@ -321,7 +321,7 @@ ReactDOM.render(
 // Puede construir de arriba hacia abajo o de abajo hacia arriba. Es decir, puede iniciar con la 
 // construcción de los componentes más arriba en la jerarquía (es decir, comenzando con FilterableProductTable)
 //  o con los más bajos en él (ProductRow). En los ejemplos más sencillos, suele ser más fácil 
-//  ir de arriba abajo, y en proyectos más grandes, es más fácil ir de abajo hacia arriba y escribir
+//  ir de arriba abajo, y en proyectos más grandes, es más fácil ir de abajo hacia arriba y hacer
 //   pruebas a medida que construyes
 
 
@@ -342,12 +342,14 @@ ReactDOM.render(
 
 // -------------------- Una breve pausa: Props vs State  ----------------------------------
 
+
 // Hay dos tipos de datos "modelo" en React: "props y estado". "props and state" Es importante entender la distinción 
 // entre los dos; puede leer "the official React docs" en el enlace de abajo  si no está seguro de cuál es la diferencia.
 // --> https://facebook.github.io/react/docs/state-and-lifecycle.html 
 
 
 // ----- Paso 3: Identificar la representación mínima (pero completa) del estado de la interfaz de usuario ----------
+
 
 // Para que tu interfaz de usuario sea interactiva, debes ser capaz de activar cambios en el modelo de 
 // datos subyacente. React hace esto fácil con el estado.
@@ -391,6 +393,88 @@ ReactDOM.render(
 // -------------------- Paso 4: Identifique dónde debe vivir su estado -----------------------------
 
 
+class CompFormBusqueda extends React.Component
+{
+	render()
+	{
+		<div>
+			<input type="text" value="" >
+		</div>
+	}
+}
+
+class CompRaiz2 extends React.Component
+{
+	render()
+	{
+		<CompFormBusqueda />
+		<>
+	}
+
+
+	
+}
+
+
+const productos = [
+					  {categoria:"Sporting Goods", precio:'$49.99', stocked:true, nombre:"Football"},
+					  {categoria: 'Sporting Goods', precio: '$9.99', stocked: true, nombre: 'Baseball'},
+					  {categoria: 'Sporting Goods', precio: '$29.99', stocked: false, nombre: 'Basketball'},
+					  {categoria: 'Electronics', precio: '$99.99', stocked: true, nombre: 'iPod Touch'},
+					  {categoria: 'Electronics', precio: '$399.99', stocked: false, nombre: 'iPhone 5'},
+					  {categoria: 'Electronics', precio: '$199.99', stocked: true, nombre: 'Nexus 7'}
+				  ]
+
+
+
+ReactDOM.render(<CompRaiz2 />,document.getElementById('cont3'));
+
+
+
+
+
+// OK, así que hemos identificado el conjunto mínimo de estados de la aplicación. A continuación, 
+// necesitamos identificar qué componente muta, o posee, este estado. Recuerde: React es todo acerca del flujo
+// de datos unidireccional en la jerarquía de componentes. Puede que no esté claro de inmediato 
+// qué componente debe poseer qué estado. Esta es a menudo la parte más difícil para los novatos de poder entender, 
+// por lo que sigue estos pasos para averiguarlo:
+
+// -- Para cada parte del estado en su aplicación:
+
+// * Identificar cada componente que Renderea algo basado en ese estado.
+
+// * Busque un componente de propietario común (un solo componente por encima de todos los componentes que
+//  necesitan el estado en la jerarquía).
+
+// * El componente propietario común u otro componente más arriba en la jerarquía debe poseer el estado.
+
+// * Si no puede encontrar un componente en el que tenga sentido ser propietario del estado, cree un 
+// nuevo componente simplemente para mantener el estado y agregarlo en algún lugar de la jerarquía por encima
+// del componente propietario común.
+
+// -- Pasemos por esta estrategia para nuestra aplicación:
+
+// * ProductTable necesita filtrar la lista de productos en función del estado y SearchBar necesita mostrar el
+//  texto de búsqueda y el estado marcado.
+
+// * El componente propietario común es FilterableProductTable.
+
+// * Conceptualmente tiene sentido para el texto del filtro y el valor comprobado para vivir en 
+//   FilterableProductTable
+
+
+// Bien, así que hemos decidido que nuestro estado vive en FilterableProductTable. Primero, agregue una propiedad 
+// de instancia this.state = {filterText: '', inStockOnly: false} al constructor de FilterableProductTable 
+// para reflejar el estado inicial de su aplicación. Luego, pase filterText y inStockOnly a ProductTable y SearchBar 
+// como un prop. Por último, utilice estos props para filtrar las filas en ProductTable y establecer
+//  los valores de los campos de formulario en SearchBar.
+
+// Puede empezar a ver cómo se comportará su aplicación: defina filterText como "ball" y refresque su aplicación.
+//  Verá que la tabla de datos se actualiza correctamente.
+
+
+
+// -------------------------- Paso 5: Agregar flujo de datos inverso ----------------------------------------
 
 
 
