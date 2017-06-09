@@ -393,51 +393,274 @@ ReactDOM.render(
 // -------------------- Paso 4: Identifique dónde debe vivir su estado -----------------------------
 
 
+// Mi ejemplo creado por mi mismo 
+
 class CompFormBusqueda extends React.Component
 {
 	render()
 	{
-		<div>
-			<input type="text" value="" >
-		</div>
+
+		return(
+				<div>
+					<input type="text"  placeholder="buscar .." value={this.props.filtroBusqueda} />
+					<br/>
+					<input type="checkbox" checked={this.props.enStock} /> Mostrar solo productos en stock
+				</div>
+			  )
+		
 	}
+}
+
+class CompCabeceraTable extends React.Component
+{
+	render()
+	{
+		return (<tr><th colSpan='2' >{this.props.producto.categoria}</th></tr>);
+	}
+			
+		  
+}
+
+class CompRowsBodyTabla extends React.Component
+{
+	render()
+	{
+		let row = "";
+
+		if(this.props.producto.stocked)
+		{
+			row = ( 
+					<tr>
+						<td>{this.props.producto.nombre}</td>
+						<td>{this.props.producto.precio}</td>
+					</tr>
+				  )
+		}
+		else
+		{
+			row = (
+					<tr style={{color:'red'}} >
+						<td>{this.props.producto.nombre}</td>
+						<td>{this.props.producto.precio}</td>
+					</tr>
+				  )  
+		}
+
+		return row;
+	}
+			
+		  
+}
+
+class CompCreateTabla extends React.Component
+{
+	
+	render()
+	{
+		let rows1 = [];
+		let categoria = null;
+
+		this.props.productos.forEach( (producto ) => 
+		{
+
+			if(producto.nombre.indexOf(this.props.filtroBusqueda) === -1 ||  ( !producto.stocked && this.props.enStock ) )
+			{
+				return '';
+			}
+
+	     	if(categoria !== producto.categoria)
+	     	{
+	     		rows1.push(<CompCabeceraTable producto={producto} key={producto.categoria} />)
+	     	}
+
+	     	rows1.push(<CompRowsBodyTabla producto={producto} key={producto.nombre} />);
+
+	     	categoria= producto.categoria;
+
+
+	    });
+
+
+		
+		return(
+				<div>
+					<table>
+						<thead>
+						<tr>
+							<td>Nombre</td>
+							<td>Precio</td>
+						</tr>
+						</thead>
+						<tbody>
+							{rows1}
+						</tbody>
+					</table>
+				</div>
+			  )
+	}
+
 }
 
 class CompRaiz2 extends React.Component
 {
-	render()
+
+	constructor(props)
 	{
-		<CompFormBusqueda />
-		<>
+		super(props);
+
+		this.state = { filtroBusqueda:'' , enStock:false };
 	}
 
+	render()
+	{
 
+		return(
+				<div>
+				<CompFormBusqueda filtroBusqueda={this.state.filtroBusqueda} enStock={this.state.enStock} />
+				<CompCreateTabla filtroBusqueda={this.state.filtroBusqueda} enStock={this.state.enStock} productos={this.props.productos}/>
+				</div>
+			  )
+		
+	}
 	
 }
 
 
-const productos = [
+const productos1 = [
 					  {categoria:"Sporting Goods", precio:'$49.99', stocked:true, nombre:"Football"},
 					  {categoria: 'Sporting Goods', precio: '$9.99', stocked: true, nombre: 'Baseball'},
 					  {categoria: 'Sporting Goods', precio: '$29.99', stocked: false, nombre: 'Basketball'},
 					  {categoria: 'Electronics', precio: '$99.99', stocked: true, nombre: 'iPod Touch'},
 					  {categoria: 'Electronics', precio: '$399.99', stocked: false, nombre: 'iPhone 5'},
 					  {categoria: 'Electronics', precio: '$199.99', stocked: true, nombre: 'Nexus 7'}
-				  ]
+				  ];
 
 
 
-ReactDOM.render(<CompRaiz2 />,document.getElementById('cont3'));
+ReactDOM.render(<CompRaiz2 productos={productos1} />,document.getElementById('cont3'));
 
 
 
 
+// Ejemplo de la documentacion de REact js de facebook 
 
-// OK, así que hemos identificado el conjunto mínimo de estados de la aplicación. A continuación, 
-// necesitamos identificar qué componente muta, o posee, este estado. Recuerde: React es todo acerca del flujo
+
+
+ class ProductCategoryRow2 extends React.Component {
+  render() {
+    return (<tr><th colSpan="2">{this.props.category}</th></tr>);
+  }
+}
+
+class ProductRow2 extends React.Component {
+  render() {
+    var name = this.props.product.stocked ?
+      this.props.product.name :
+      <span style={{color: 'red'}}>
+        {this.props.product.name}
+      </span>;
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{this.props.product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable2 extends React.Component {
+  render() {
+    var rows = [];
+    var lastCategory = null;
+    this.props.products.forEach((product) => {
+
+      if (product.name.indexOf(this.props.filterText) === -1 || (!product.stocked && this.props.inStockOnly)) {
+        return;
+      }
+      if (product.category !== lastCategory) {
+        rows.push(<ProductCategoryRow2 category={product.category} key={product.category} />);
+      }
+      rows.push(<ProductRow2 product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class SearchBar2 extends React.Component {
+  render() {
+    return (
+      <form>
+        <input type="text" placeholder="Search..." value={this.props.filterText} />
+        <p>
+          <input type="checkbox" checked={this.props.inStockOnly} />
+          {' '}
+          Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class FilterableProductTable2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: '',
+      inStockOnly: false
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <SearchBar2
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+        <ProductTable2
+          products={this.props.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+      </div>
+    );
+  }
+}
+
+
+var PRODUCTS = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+
+ReactDOM.render(
+  <FilterableProductTable products={PRODUCTS} />,
+  document.getElementById('cont4')
+);
+
+
+
+
+// OK, así que hemos identificado cual es el conjunto mínimo de estados de la aplicación. A continuación, 
+// necesitamos identificar qué componente muta, o posee, este estado. Recuerde: React maneja muy bien el flujo
 // de datos unidireccional en la jerarquía de componentes. Puede que no esté claro de inmediato 
-// qué componente debe poseer qué estado. Esta es a menudo la parte más difícil para los novatos de poder entender, 
-// por lo que sigue estos pasos para averiguarlo:
+// qué componente debe poseer qué estado. Esta es a menudo la parte más difícil para los novatos de 
+// poder entender, por lo que sigue estos pasos para que se le facilite:
 
 // -- Para cada parte del estado en su aplicación:
 
@@ -452,30 +675,424 @@ ReactDOM.render(<CompRaiz2 />,document.getElementById('cont3'));
 // nuevo componente simplemente para mantener el estado y agregarlo en algún lugar de la jerarquía por encima
 // del componente propietario común.
 
-// -- Pasemos por esta estrategia para nuestra aplicación:
+// -- Pasemos por esta estrategia para nuestra aplicación :
 
-// * ProductTable necesita filtrar la lista de productos en función del estado y SearchBar necesita mostrar el
-//  texto de búsqueda y el estado marcado.
+// * ProductTable2 necesita filtrar la lista de productos en función del estado y el filtro de busqueda 
+// y SearchBar2 necesita mostrar el texto de búsqueda y el estado marcado.
 
-// * El componente propietario común es FilterableProductTable.
+// * El componente propietario común es FilterableProductTable2.
 
 // * Conceptualmente tiene sentido para el texto del filtro y el valor comprobado para vivir en 
-//   FilterableProductTable
+//   FilterableProductTable2
 
 
-// Bien, así que hemos decidido que nuestro estado vive en FilterableProductTable. Primero, agregue una propiedad 
-// de instancia this.state = {filterText: '', inStockOnly: false} al constructor de FilterableProductTable 
-// para reflejar el estado inicial de su aplicación. Luego, pase filterText y inStockOnly a ProductTable y SearchBar 
-// como un prop. Por último, utilice estos props para filtrar las filas en ProductTable y establecer
-//  los valores de los campos de formulario en SearchBar.
+// Bien, así que hemos decidido que nuestro estado vive en FilterableProductTable2. Primero, agregue una propiedad 
+// de instancia this.state = {filterText: '', inStockOnly: false} al constructor de FilterableProductTable2 
+// para reflejar el estado inicial de su aplicación. Luego, pase filterText y inStockOnly a ProductTable2
+// y SearchBar como un prop. Por último, utilice estos props para filtrar las filas en ProductTable2 
+// y establecer  los valores de los campos de formulario en SearchBar2.
 
 // Puede empezar a ver cómo se comportará su aplicación: defina filterText como "ball" y refresque su aplicación.
 //  Verá que la tabla de datos se actualiza correctamente.
 
 
+// NOTA: 
+
+// El componente de propietario común es el componente de mayor jerarquía osea el que esta mas arriba
+// y por ende es el que renderea los componentes de menor jerarquía o menor nivel.
+
+// En el siguiente ejemplo el componente propietario comun es FilterableProductTable ya que esta mas arriba en 
+// la jerarquía y manda a llamar o a renderear a los otros componentes "SearchBar" y "ProductTable" 
+// dentro de él.
+
+
+// class FilterableProductTable extends React.Component {
+//   render() 
+//   {
+// 	    return (
+// 	      <div>
+// 	        <SearchBar/>
+// 	        <ProductTable/>
+// 	      </div>
+// 	    );
+//   }
+// }
+
+
 
 // -------------------------- Paso 5: Agregar flujo de datos inverso ----------------------------------------
 
+
+// Ejemplo creado por mi mismo 
+
+
+class CompHeadTabla extends React.Component
+{
+	render()
+	{
+		return(
+				<tr><th colSpan={'2'}>{this.props.producto.categoria}</th></tr>
+			  )
+		
+	}
+}
+
+
+class CompRenderBodyTabla extends React.Component
+{
+	render()
+	{
+
+		let row = "";
+
+		if(this.props.producto.stocked)
+		{
+			row = (
+						<tr>
+							<td>{this.props.producto.nombre}</td>
+							<td>{this.props.producto.precio}</td>
+						</tr>
+				      )
+		}
+		else
+		{
+			row = (
+						<tr>
+							<td style={{color:'red'}}>{this.props.producto.nombre}</td>
+							<td>{this.props.producto.precio}</td>
+						</tr>
+				      )
+		}
+
+		return(
+				row
+			  )
+	}
+}
+
+
+class CompSearch extends React.Component
+{
+	constructor(props)
+	{
+		super(props);
+
+		this.cambioFiltroSearch = this.cambioFiltroSearch.bind(this);
+		this.cambioEnStock = this.cambioEnStock.bind(this);
+
+	}
+
+	cambioFiltroSearch(e)
+	{
+		this.props.functCambioFiltroSearch(e.target.value);
+	}
+
+	cambioEnStock(e)
+	{
+		this.props.functCambioEnStock(e.target.checked);
+	}
+
+	render()
+	{
+		return(
+				<div>
+					<input type="text" value={this.props.filtroSearch} onChange={this.cambioFiltroSearch} />
+					<br />
+					<input type="checkbox" value={this.props.enStock} onChange={this.cambioEnStock} />
+					Mostrar solo productos disponibles
+				</div>
+			  )
+	}
+}
+
+class CompFilterTabla extends React.Component
+{
+	render()
+	{
+
+		let filas = [];
+		let categoria = null;
+
+		this.props.productos.forEach((producto) => 
+		{
+
+			if(  producto.nombre.indexOf(this.props.filtroSearch) === -1  || ( !producto.stocked && this.props.enStock ) )
+			{
+				return '';
+			}
+
+			if(producto.categoria !== categoria)
+			{
+				filas.push(<CompHeadTabla producto={producto} key={producto.categoria} />);
+			}
+
+			filas.push(<CompRenderBodyTabla producto={producto}  key={producto.nombre} />);
+
+			categoria = producto.categoria;
+
+		})
+
+
+		return(
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Precio</th>
+							</tr>
+						</thead>
+						<tbody>
+							{filas}
+						</tbody>
+					</table>
+				</div>
+			  )
+	}
+}
+
+class ComponentMain extends React.Component
+{
+	constructor(props)
+	{
+		super(props);
+
+		this.state = {filtroSearch: '' , enStock: false};
+
+		this.functCambioEnStock = this.functCambioEnStock.bind(this);
+		this.functCambioFiltroSearch = this.functCambioFiltroSearch.bind(this);
+
+	}
+
+	functCambioEnStock(enStock)
+	{
+		this.setState({enStock:enStock})
+	}
+
+	functCambioFiltroSearch(filtroSearch)
+	{
+		this.setState({filtroSearch:filtroSearch})
+	}
+
+
+	render()
+	{
+		return(
+				<div>
+					<CompSearch 
+								productos={this.props.productos}
+								filtroSearch={this.state.filtroSearch} 
+								enStock={this.state.enStock}
+								functCambioFiltroSearch={this.functCambioFiltroSearch}
+								functCambioEnStock={this.functCambioEnStock}
+
+					/>
+					<CompFilterTabla 
+										productos={this.props.productos}
+										filtroSearch={this.state.filtroSearch} 
+										enStock={this.state.enStock}
+					/>
+				</div>
+			  )
+	}
+}
+
+
+const productos2 = [
+					  {categoria:"Sporting Goods", precio:'$49.99', stocked:true, nombre:"Football"},
+					  {categoria: 'Sporting Goods', precio: '$9.99', stocked: true, nombre: 'Baseball'},
+					  {categoria: 'Sporting Goods', precio: '$29.99', stocked: false, nombre: 'Basketball'},
+					  {categoria: 'Electronics', precio: '$99.99', stocked: true, nombre: 'iPod Touch'},
+					  {categoria: 'Electronics', precio: '$399.99', stocked: false, nombre: 'iPhone 5'},
+					  {categoria: 'Electronics', precio: '$199.99', stocked: true, nombre: 'Nexus 7'}
+				  ];
+
+ReactDOM.render(<ComponentMain productos={productos2} />,document.getElementById('cont5'));
+
+
+
+ 
+//Ejemplo de la documentacion de React Js de Facebook 
+
+
+class ProductCategoryRow3 extends React.Component {
+  render() {
+    return (<tr><th colSpan="2">{this.props.category}</th></tr>);
+  }
+}
+
+class ProductRow3 extends React.Component {
+  render() {
+    var name = this.props.product.stocked ?
+      this.props.product.name :
+      <span style={{color: 'red'}}>
+        {this.props.product.name}
+      </span>;
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{this.props.product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable3 extends React.Component {
+  render() {
+    var rows = [];
+    var lastCategory = null;
+    console.log(this.props.inStockOnly)
+    this.props.products.forEach((product) => {
+      if (product.name.indexOf(this.props.filterText) === -1 || (!product.stocked && this.props.inStockOnly)) {
+        return;
+      }
+      if (product.category !== lastCategory) {
+        rows.push(<ProductCategoryRow3 category={product.category} key={product.category} />);
+      }
+      rows.push(<ProductRow3 product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class SearchBar3 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterTextInputChange = this.handleFilterTextInputChange.bind(this);
+    this.handleInStockInputChange = this.handleInStockInputChange.bind(this);
+  }
+  
+  handleFilterTextInputChange(e) {
+    this.props.onFilterTextInput(e.target.value);
+  }
+  
+  handleInStockInputChange(e) {
+    this.props.onInStockInput(e.target.checked);
+  }
+  
+  render() {
+    return (
+      <form>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={this.props.filterText}
+          onChange={this.handleFilterTextInputChange}
+        />
+        <p>
+          <input
+            type="checkbox"
+            checked={this.props.inStockOnly}
+            onChange={this.handleInStockInputChange}
+          />
+          {' '}
+          Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class FilterableProductTable3 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: '',
+      inStockOnly: false
+    };
+    
+    this.handleFilterTextInput = this.handleFilterTextInput.bind(this);
+    this.handleInStockInput = this.handleInStockInput.bind(this);
+  }
+
+  handleFilterTextInput(filterText) {
+    this.setState({
+      filterText: filterText
+    });
+  }
+  
+  handleInStockInput(inStockOnly) {
+    this.setState({
+      inStockOnly: inStockOnly
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <SearchBar3
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+          onFilterTextInput={this.handleFilterTextInput}
+          onInStockInput={this.handleInStockInput}
+        />
+        <ProductTable3
+          products={this.props.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+      </div>
+    );
+  }
+}
+
+
+var PRODUCTS = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+
+ReactDOM.render(
+  <FilterableProductTable3 products={PRODUCTS} />,
+  document.getElementById('cont6')
+);
+
+
+// Hasta ahora, hemos creado una aplicación que se ejecuta correctamente en función de los props y el estado que
+//  fluye por la jerarquía. Ahora es el momento de soportar el flujo de datos de otra manera: los componentes 
+//  de formulario de profundidad en la jerarquía necesitan actualizar el estado en FilterableProductTable3.
+
+// React hace explícito este flujo de datos para facilitar el entender de cómo funciona el programa, 
+// pero requiere un poco más de escritura que la vinculación de datos bidireccional tradicional.
+
+// Si intenta escribir o marcar la casilla en la versión actual del ejemplo, verá que React ignora su entrada. 
+// Esto es intencional, ya que hemos establecido el valor prop de la entrada a ser siempre igual al estado pasado
+// de FilterableProductTable3.
+
+// Pensemos en lo que queremos que suceda. Queremos asegurarnos de que siempre que el usuario cambie el formulario, 
+// actualizamos el estado para reflejar la entrada del usuario. Dado que los componentes sólo deben actualizar 
+// su propio estado, FilterableProductTable3 pasará callbacks a SearchBar3 que se disparará siempre que el estado 
+// debe actualizarse. Podemos usar el evento onChange en las entradas para ser notificado de ello. 
+// Las devoluciones de llamada pasadas por FilterableProductTable3 llamarán setState() y la aplicación se actualizará.
+
+// Aunque esto suena complejo, es realmente sólo unas pocas líneas de código. Y es realmente explícito 
+// cómo sus datos fluyen a lo largo de la aplicación.
+
+
+
+// ----------------------------------- Y eso es todo -----------------------------------------------
+
+
+// Con suerte, esto le da una idea de cómo pensar sobre la construcción de componentes y aplicaciones con React.
+// Si bien puede ser un poco más de mecanografía de lo que está acostumbrado, recuerde que el código 
+// se lee mucho más de lo que está escrito, y es extremadamente fácil de leer este código modular, explícito.
+// A medida que empiece a construir grandes bibliotecas de componentes, apreciará esta explicidad y modularidad,
+// y con la reutilización de código, sus líneas de código comenzarán a encogerse. :)
 
 
 
