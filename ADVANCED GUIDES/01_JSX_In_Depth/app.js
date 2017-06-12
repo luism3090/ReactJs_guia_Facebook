@@ -68,12 +68,24 @@
 // Si no utiliza un paquete de JavaScript y cargar React desde una etiqueta <script>, ya está 
 // en el ámbito como React global.
 
-import {FeedbackMessage} from './mi_componente'
+
+
+import React from 'node_modules/react';
+
+class FeedbackMessage extends React.Component {
+    render() {
+        return (
+            <div>
+                Bienvenido a FeedbackMessage!
+            </div>
+        )
+    }
+
+}
+
+export default FeedbackMessage;
 
 ReactDOM.render(<FeedbackMessage />,document.getElementById('cont1'));
-
-
-
 
 
 
