@@ -1,4 +1,7 @@
  
+import React from "react";
+import ReactDOM from 'react-dom';
+
 
  // ---------------------------------------- JSX In Depth -----------------------------------------
 
@@ -65,14 +68,68 @@
 //   return <CustomButton color="red" />;
 // }
 
-// Si no utiliza un paquete de JavaScript y cargar React desde una etiqueta <script>, ya está 
-// en el ámbito como React global.
 
-import React from "react";
-import ReactDOM from 'react-dom';
-import FeedbackMessage from './app2';
 
-ReactDOM.render(<FeedbackMessage />,document.getElementById('cont1'))
+import {CustomButton} from './CustomButton.js';
+
+function WarninButton()
+{
+	return(<CustomButton url='http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/Button-Warning-icon.png' />);
+}
+
+
+ReactDOM.render(<WarninButton />,document.getElementById('cont1'));
+
+
+
+// ------------------------------ Uso de la notación de puntos para JSX Tipo  ----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// otros ejemplos creados por mi mismo 
+
+import {FeedbackMessage,Header} from './app2.js';
+// import  Header from './app2';
+
+
+var clientes = [
+					{nombre:"cliente1",apellido:"apellido1",edad:20},
+					{nombre:"cliente2",apellido:"apellido2",edad:30},
+					{nombre:"cliente3",apellido:"apellido3",edad:35},
+					{nombre:"cliente4",apellido:"apellido4",edad:15}
+				]
+
+
+ReactDOM.render(<FeedbackMessage  />,document.getElementById('cont2'));
+ReactDOM.render(<Header clientes={clientes} />,document.getElementById('cont3'));
+//ReactDOM.render(<FeedbackMessage />,document.getElementById('cont2')); 
+
 
 
 
