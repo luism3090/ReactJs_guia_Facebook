@@ -1,0 +1,27 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "watchify ./ADVANCED_GUIDES/01_JSX_in_Depth/app.js -v -t [ babelify --presets [ es2015 react] ] -o ./ADVANCED_GUIDES/01_JSX_in_Depth/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "y"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^14.4.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
+    "watchify": "^3.9.0"
+  }
+}
