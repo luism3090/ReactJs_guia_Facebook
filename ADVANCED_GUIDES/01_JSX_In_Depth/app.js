@@ -1,6 +1,4 @@
  
-import React from "react";
-import ReactDOM from 'react-dom';
 
 
  // ---------------------------------------- JSX In Depth -----------------------------------------
@@ -68,6 +66,8 @@ import ReactDOM from 'react-dom';
 //   return <CustomButton color="red" />;
 // }
 
+import React from "react";
+import ReactDOM from 'react-dom';
 
 
 import {CustomButton} from './CustomButton.js';
@@ -85,8 +85,59 @@ ReactDOM.render(<WarninButton />,document.getElementById('cont1'));
 // ------------------------------ Uso de la notación de puntos para JSX Tipo  ----------------------------------------
 
 
+// También puede hacer referencia a un componente React utilizando la notación de puntos desde dentro de JSX. Esto es conveniente si 
+// tiene un solo módulo que exporta muchos componentes de React.children Por ejemplo, si MyComponents.DatePicker es un componente,
+// puede utilizarlo directamente desde JSX con:
 
 
+
+// mi ejemplo creado por mi mismo
+
+const MiComponente = {
+	Saludo : function Saludo(props)
+	{
+		return(<h2>Hola mundo {props.mensaje}</h2>);
+	},
+	SumaNumeros : function SumaNumeros(props)
+	{ 
+		return(<h2>La suma de los números es: {props.num1+props.num2} </h2>);
+	}
+}
+
+function MostrarSaludo()
+{
+	return(		<div>
+					<MiComponente.Saludo mensaje={"ReactJs"}/>
+					<MiComponente.SumaNumeros num1={5} num2={5} />
+				</div>
+			);
+}
+
+
+ReactDOM.render(<MostrarSaludo />,document.getElementById('cont2'));
+
+
+
+// ejemplo de la libreria de React js
+
+
+const MyComponents = 
+{
+  DatePicker: function DatePicker(props) 
+  {
+    return <h2>Imagine a {props.color} datepicker here.</h2>;
+  }
+}
+
+function BlueDatePicker() {
+  return <MyComponents.DatePicker color="blue" />;
+}
+
+ReactDOM.render(<BlueDatePicker />,document.getElementById('cont3'));
+
+
+
+// ---------------------- Los componentes definidos por el usuario deben estar en mayúsculas -----------------------------------
 
 
 
@@ -126,8 +177,8 @@ var clientes = [
 				]
 
 
-ReactDOM.render(<FeedbackMessage  />,document.getElementById('cont2'));
-ReactDOM.render(<Header clientes={clientes} />,document.getElementById('cont3'));
+ReactDOM.render(<FeedbackMessage  />,document.getElementById('cont8'));
+ReactDOM.render(<Header clientes={clientes} />,document.getElementById('cont9'));
 //ReactDOM.render(<FeedbackMessage />,document.getElementById('cont2')); 
 
 

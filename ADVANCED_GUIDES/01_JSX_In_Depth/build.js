@@ -124,10 +124,71 @@ function WarninButton() {
 //   return <CustomButton color="red" />;
 // }
 
-
 _reactDom2.default.render(_react2.default.createElement(WarninButton, null), document.getElementById('cont1'));
 
 // ------------------------------ Uso de la notación de puntos para JSX Tipo  ----------------------------------------
+
+
+// También puede hacer referencia a un componente React utilizando la notación de puntos desde dentro de JSX. Esto es conveniente si 
+// tiene un solo módulo que exporta muchos componentes de React.children Por ejemplo, si MyComponents.DatePicker es un componente,
+// puede utilizarlo directamente desde JSX con:
+
+
+// mi ejemplo creado por mi mismo
+
+var MiComponente = {
+	Saludo: function Saludo(props) {
+		return _react2.default.createElement(
+			'h2',
+			null,
+			'Hola mundo ',
+			props.mensaje
+		);
+	},
+	SumaNumeros: function SumaNumeros(props) {
+		return _react2.default.createElement(
+			'h2',
+			null,
+			'La suma de los n\xFAmeros es: ',
+			props.num1 + props.num2,
+			' '
+		);
+	}
+};
+
+function MostrarSaludo() {
+	return _react2.default.createElement(
+		'div',
+		null,
+		_react2.default.createElement(MiComponente.Saludo, { mensaje: "ReactJs" }),
+		_react2.default.createElement(MiComponente.SumaNumeros, { num1: 5, num2: 5 })
+	);
+}
+
+_reactDom2.default.render(_react2.default.createElement(MostrarSaludo, null), document.getElementById('cont2'));
+
+// ejemplo de la libreria de React js
+
+
+var MyComponents = {
+	DatePicker: function DatePicker(props) {
+		return _react2.default.createElement(
+			'h2',
+			null,
+			'Imagine a ',
+			props.color,
+			' datepicker here.'
+		);
+	}
+};
+
+function BlueDatePicker() {
+	return _react2.default.createElement(MyComponents.DatePicker, { color: 'blue' });
+}
+
+_reactDom2.default.render(_react2.default.createElement(BlueDatePicker, null), document.getElementById('cont3'));
+
+// ---------------------- Los componentes definidos por el usuario deben estar en mayúsculas -----------------------------------
 
 
 // otros ejemplos creados por mi mismo 
@@ -137,8 +198,8 @@ _reactDom2.default.render(_react2.default.createElement(WarninButton, null), doc
 
 var clientes = [{ nombre: "cliente1", apellido: "apellido1", edad: 20 }, { nombre: "cliente2", apellido: "apellido2", edad: 30 }, { nombre: "cliente3", apellido: "apellido3", edad: 35 }, { nombre: "cliente4", apellido: "apellido4", edad: 15 }];
 
-_reactDom2.default.render(_react2.default.createElement(_app.FeedbackMessage, null), document.getElementById('cont2'));
-_reactDom2.default.render(_react2.default.createElement(_app.Header, { clientes: clientes }), document.getElementById('cont3'));
+_reactDom2.default.render(_react2.default.createElement(_app.FeedbackMessage, null), document.getElementById('cont8'));
+_reactDom2.default.render(_react2.default.createElement(_app.Header, { clientes: clientes }), document.getElementById('cont9'));
 //ReactDOM.render(<FeedbackMessage />,document.getElementById('cont2'));
 
 },{"./CustomButton.js":1,"./app2.js":3,"react":184,"react-dom":33}],3:[function(require,module,exports){
