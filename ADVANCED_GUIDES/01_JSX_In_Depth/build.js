@@ -498,26 +498,309 @@ _reactDom2.default.render(_react2.default.createElement(MiApp2, null), document.
 // </div>
 
 
-// ejemplo :
+// Ejemplo creado por mi mismo :
 
 
-function Mycontenedor() {
+function Micontenedor(props) {
 	return _react2.default.createElement(
 		'div',
 		{ id: 'divContenedor' },
-		'this.children'
+		props.children
 	);
 }
 
-// otros ejemplos creados por mi mismo 
+function MiPrimerLista() {
+	return _react2.default.createElement(
+		'ul',
+		null,
+		_react2.default.createElement(
+			'li',
+			null,
+			'item1'
+		),
+		_react2.default.createElement(
+			'li',
+			null,
+			'item2'
+		)
+	);
+}
+
+function MiSegundaLista() {
+	return _react2.default.createElement(
+		'ul',
+		null,
+		_react2.default.createElement(
+			'li',
+			null,
+			'item1'
+		),
+		_react2.default.createElement(
+			'li',
+			null,
+			'item2'
+		)
+	);
+}
+
+function MostrarListas() {
+	return _react2.default.createElement(
+		Micontenedor,
+		null,
+		_react2.default.createElement(
+			'div',
+			null,
+			'Primera lista'
+		),
+		_react2.default.createElement(MiPrimerLista, null),
+		_react2.default.createElement(
+			'div',
+			null,
+			'Segunda lista'
+		),
+		_react2.default.createElement(MiSegundaLista, null)
+	);
+}
+
+function MostrarListas2() {
+	return _react2.default.createElement(
+		'div',
+		null,
+		_react2.default.createElement(
+			'div',
+			null,
+			'Primera lista'
+		),
+		_react2.default.createElement(MiPrimerLista, null),
+		_react2.default.createElement(
+			'div',
+			null,
+			'Segunda lista'
+		),
+		_react2.default.createElement(MiSegundaLista, null)
+	);
+}
+
+_reactDom2.default.render(_react2.default.createElement(MostrarListas, null), document.getElementById('cont9'));
+_reactDom2.default.render(_react2.default.createElement(MostrarListas, null), document.getElementById('cont10'));
+
+// Un componente React no puede devolver múltiples elementos React. Pero una sola expresión JSX puede 
+// tener varios hijos, así que si quieres que un componente muestre varias cosas, puedes envolverlo en 
+// una div como ésta en el ejemplo de arriba o en un componente contenedor.
+
+
+// ------------------------------- JavaScript expresiones como children ------------------------------------------------
+
+
+// Puede pasar cualquier expresión JavaScript como children, encerrándola dentro de {}. Por ejemplo, estas expresiones
+//  son equivalentes:
+
+
+// <MyComponent>foo</MyComponent>
+
+// <MyComponent>{'foo'}</MyComponent>
+
+
+// Esto es a menudo útil para renderizar una lista de expresiones JSX de longitud arbitraria. Por ejemplo, 
+// esto genera una lista HTML:
+
+
+function ItemLista(props) {
+	return _react2.default.createElement(
+		'li',
+		null,
+		props.item
+	);
+}
+
+function TodoLista() {
+	var lista = ['itemLista1', 'itemLista2', 'itemLista3', 'itemLista4', 'itemLista5'];
+
+	return _react2.default.createElement(
+		'ul',
+		null,
+		lista.map(function (item, index) {
+			return _react2.default.createElement(ItemLista, { item: item, key: index });
+		})
+	);
+}
+
+_reactDom2.default.render(_react2.default.createElement(TodoLista, null), document.getElementById('cont11'));
+
+// Las expresiones JavaScript pueden mezclarse con otros tipos de children. Esto suele ser útil en lugar de
+//  plantillas de cadena:
+
+
+// function Hello(props) {
+//   return <div>Hello {props.addressee}!</div>;
+// }
+
+
+// ------------------------------------- Funciones como children  -----------------------------------------
+
+
+// Normalmente, las expresiones JavaScript insertadas en JSX evaluarán una cadena, un elemento React o una lista 
+// de esas cosas. Sin embargo, props.children funciona como cualquier otro prop en que puede pasar cualquier
+// tipo de datos, no sólo los tipos que React sabe renderear. Por ejemplo, si tiene un componente personalizado, 
+// podrías tener que tomar una devolución de llamada "callback" como props.children:
+
+
+// Llama a los children a devolver numTimes para producir un componente repetido
+
+function Repetir(props) {
+	var items = [];
+
+	for (var i = 0; i < props.numeroVeces; i++) {
+		items.push(props.children(i));
+	}
+
+	return _react2.default.createElement(
+		'div',
+		null,
+		items
+	);
+}
+
+function ListaDeDiezCosas() {
+	return _react2.default.createElement(
+		Repetir,
+		{ numeroVeces: 10 },
+		function (index) {
+			return _react2.default.createElement(
+				'div',
+				{ key: index },
+				' Este es el item ',
+				index,
+				' en la lista '
+			);
+		}
+	);
+}
+
+_reactDom2.default.render(_react2.default.createElement(ListaDeDiezCosas, null), document.getElementById('cont12'));
+
+// Los children pasados ​​a un componente personalizado pueden ser cualquier cosa, siempre y cuando ese componente 
+// los transforme en algo que React pueda entender antes de renderizarlos. Este uso no es común, pero funciona 
+// si desea estirar lo que JSX es capaz de hacer.
+
+
+// ----------------------------Booleans, Null y Undefined son ignorados --------------------------------------------
+
+// false, null, undefined y verdadero son hijos válidos. Ellos simplemente no renderean. Estas expresiones JSX 
+// rendearan todas la misma cosa:
+
+
+// <div />
+
+// <div></div>
+
+// <div>{false}</div>
+
+// <div>{null}</div>
+
+// <div>{undefined}</div>
+
+// <div>{true}</div>
+
+
+function Datos() {
+	return _react2.default.createElement(
+		'span',
+		null,
+		' No se retorna nada',
+		_react2.default.createElement('div', null),
+		_react2.default.createElement('div', null),
+		_react2.default.createElement(
+			'div',
+			null,
+			false
+		),
+		_react2.default.createElement(
+			'div',
+			null,
+			null
+		),
+		_react2.default.createElement(
+			'div',
+			null,
+			undefined
+		),
+		_react2.default.createElement(
+			'div',
+			null,
+			true
+		)
+	);
+}
+
+_reactDom2.default.render(_react2.default.createElement(Datos, null), document.getElementById('cont13'));
+
+// Esto puede ser útil para condicionalmente generar elementos React. 
+// Este JSX sólo renderea a <Header /> si if showHeader es true:
+
+// <div>
+//   {showHeader && <Header />}
+//   <Content />
+// </div>
+
+
+function Algo(props) {
+	var showHeader = props.showHeader;
+
+	return _react2.default.createElement(
+		'div',
+		null,
+		showHeader && _react2.default.createElement(ListaDeDiezCosas, null),
+		_react2.default.createElement(
+			'div',
+			null,
+			'Hola mundo ReactJs '
+		)
+	);
+}
+
+_reactDom2.default.render(_react2.default.createElement(Algo, { showHeader: false }), document.getElementById('cont14'));
+
+// Una advertencia es que algunos valores "falsos" "falsy" values, como el número 0, siguen siendo rendereados por React.
+//  Por ejemplo, este código no se comportará como se podría esperar porque 0 se imprimirá cuando props.messages sea 
+// un array vacío:
+
+
+// <div>
+//   {props.messages.length &&
+//     <MessageList messages={props.messages} />
+//   }
+// </div>
+
+
+// Para solucionar esto, asegúrese de que la expresión antes de && siempre sea booleana:
+
+
+// <div>
+//   {props.messages.length > 0 &&
+//     <MessageList messages={props.messages} />
+//   }
+// </div>
+
+
+// Por el contrario, si desea que aparezca un valor como false, true, null o undefined en la salida, 
+// primero debe convertirlo en una cadena:
+
+
+// <div>
+//   My JavaScript variable is {String(myVariable)}.
+// </div>
+
+
+// otros ejemplos fuera de la documentacion creados por mi mismo 
 
 // import  Header from './app2';
 
 
 var clientes = [{ nombre: "cliente1", apellido: "apellido1", edad: 20 }, { nombre: "cliente2", apellido: "apellido2", edad: 30 }, { nombre: "cliente3", apellido: "apellido3", edad: 35 }, { nombre: "cliente4", apellido: "apellido4", edad: 15 }];
 
-_reactDom2.default.render(_react2.default.createElement(_app.FeedbackMessage, null), document.getElementById('cont15'));
-_reactDom2.default.render(_react2.default.createElement(_app.Header, { clientes: clientes }), document.getElementById('cont16'));
+_reactDom2.default.render(_react2.default.createElement(_app.FeedbackMessage, null), document.getElementById('cont17'));
+_reactDom2.default.render(_react2.default.createElement(_app.Header, { clientes: clientes }), document.getElementById('cont18'));
 //ReactDOM.render(<FeedbackMessage />,document.getElementById('cont2'));
 
 },{"./CustomButton.js":1,"./app2.js":3,"./stories":4,"./stories.js":4,"react":185,"react-dom":34}],3:[function(require,module,exports){

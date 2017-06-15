@@ -445,96 +445,271 @@ ReactDOM.render(<MiApp2  />,document.getElementById('cont8'));
 // </div>
 
 
-// ejemplo :
+// Ejemplo creado por mi mismo :
 
 
-function Mycontenedor()
+function Micontenedor(props)
 {
-	return <div id='divContenedor'>this.children</div>
+	return <div id='divContenedor'>{props.children}</div>
+}
+
+
+function MiPrimerLista()
+{
+	return (	
+				<ul>
+					<li>item1</li>
+					<li>item2</li>
+				</ul>
+			)
+}
+
+function MiSegundaLista()
+{
+	return (
+				<ul>
+					<li>item1</li>
+					<li>item2</li>
+				</ul>
+			)
 }
 
 
 
+function MostrarListas()
+{
+	return(
+			<Micontenedor>
+				<div>Primera lista</div>
+				<MiPrimerLista />
+				<div>Segunda lista</div>
+				<MiSegundaLista />
+			</Micontenedor>
+		  )
+}
 
+function MostrarListas2()
+{
+	return(
+			<div>
+				<div>Primera lista</div>
+				<MiPrimerLista />
+				<div>Segunda lista</div>
+				<MiSegundaLista />
+			</div>
+		  )
+}
 
+ReactDOM.render(<MostrarListas />,document.getElementById('cont9'));
+ReactDOM.render(<MostrarListas />,document.getElementById('cont10'));
 
 
+// Un componente React no puede devolver múltiples elementos React. Pero una sola expresión JSX puede 
+// tener varios hijos, así que si quieres que un componente muestre varias cosas, puedes envolverlo en 
+// una div como ésta en el ejemplo de arriba o en un componente contenedor.
 
 
 
+// ------------------------------- JavaScript expresiones como children ------------------------------------------------
 
 
+// Puede pasar cualquier expresión JavaScript como children, encerrándola dentro de {}. Por ejemplo, estas expresiones
+//  son equivalentes:
 
 
+// <MyComponent>foo</MyComponent>
 
+// <MyComponent>{'foo'}</MyComponent>
 
 
+// Esto es a menudo útil para renderizar una lista de expresiones JSX de longitud arbitraria. Por ejemplo, 
+// esto genera una lista HTML:
 
 
+function ItemLista(props)
+{
+	return <li>{props.item}</li>
+}
 
 
+function TodoLista()
+{
+	const lista = ['itemLista1','itemLista2','itemLista3','itemLista4','itemLista5']; 
 
+	return (
+				<ul>
+				{
+					lista.map((item,index)=>
+					{
+						return <ItemLista item={item} key={index} />
+					})
+				}
+				</ul>
+			)
 
+}
 
+ReactDOM.render(<TodoLista />,document.getElementById('cont11'));
 
 
+// Las expresiones JavaScript pueden mezclarse con otros tipos de children. Esto suele ser útil en lugar de
+//  plantillas de cadena:
 
 
+// function Hello(props) {
+//   return <div>Hello {props.addressee}!</div>;
+// }
 
 
 
+// ------------------------------------- Funciones como children  -----------------------------------------
 
 
+// Normalmente, las expresiones JavaScript insertadas en JSX evaluarán una cadena, un elemento React o una lista 
+// de esas cosas. Sin embargo, props.children funciona como cualquier otro prop en que puede pasar cualquier
+// tipo de datos, no sólo los tipos que React sabe renderear. Por ejemplo, si tiene un componente personalizado, 
+// podrías tener que tomar una devolución de llamada "callback" como props.children:
 
 
+// Llama a los children a devolver numTimes para producir un componente repetido
 
+function Repetir(props)
+{
+	let items = [];
 
+	for(let i = 0; i<props.numeroVeces; i++)
+	{
+		items.push(props.children(i));
+	}
 
+	return <div>{items}</div>;
+}
 
+function ListaDeDiezCosas()
+{
+	return(
+			<Repetir numeroVeces={10}>
+				{(index) => <div key={index} > Este es el item {index} en la lista </div>}
+			</Repetir>
+		  )
+	
+}
 
+ReactDOM.render(<ListaDeDiezCosas />,document.getElementById('cont12'));
 
 
+// Los children pasados ​​a un componente personalizado pueden ser cualquier cosa, siempre y cuando ese componente 
+// los transforme en algo que React pueda entender antes de renderizarlos. Este uso no es común, pero funciona 
+// si desea estirar lo que JSX es capaz de hacer.
 
 
+// ----------------------------Booleans, Null y Undefined son ignorados --------------------------------------------
 
+// false, null, undefined y verdadero son hijos válidos. Ellos simplemente no renderean. Estas expresiones JSX 
+// rendearan todas la misma cosa:
 
 
+// <div />
 
+// <div></div>
 
+// <div>{false}</div>
 
+// <div>{null}</div>
 
+// <div>{undefined}</div>
 
+// <div>{true}</div>
 
 
+function Datos()
+{
+	return(
+			<span> No se retorna nada
+					<div />
 
+					<div></div>
 
+					<div>{false}</div>
 
+					<div>{null}</div>
 
+					<div>{undefined}</div>
 
+					<div>{true}</div>
 
+			</span>
 
+			);
+}
 
+ReactDOM.render(<Datos />,document.getElementById('cont13'));
 
 
+// Esto puede ser útil para condicionalmente generar elementos React. 
+// Este JSX sólo renderea a <Header /> si if showHeader es true:
 
+// <div>
+//   {showHeader && <Header />}
+//   <Content />
+// </div>
 
 
 
+function Algo(props)
+{
+	let showHeader = props.showHeader;
 
+	return(
+				<div>
+					  {showHeader && <ListaDeDiezCosas />}
+					  <div>Hola mundo ReactJs </div>
+				</div>
 
+		  )
+}
 
+ReactDOM.render(<Algo showHeader={false}/>,document.getElementById('cont14'));
 
 
+// Una advertencia es que algunos valores "falsos" "falsy" values, como el número 0, siguen siendo rendereados por React.
+//  Por ejemplo, este código no se comportará como se podría esperar porque 0 se imprimirá cuando props.messages sea 
+// un array vacío:
 
 
+// <div>
+//   {props.messages.length &&
+//     <MessageList messages={props.messages} />
+//   }
+// </div>
 
 
+// Para solucionar esto, asegúrese de que la expresión antes de && siempre sea booleana:
 
 
+// <div>
+//   {props.messages.length > 0 &&
+//     <MessageList messages={props.messages} />
+//   }
+// </div>
 
 
+// Por el contrario, si desea que aparezca un valor como false, true, null o undefined en la salida, 
+// primero debe convertirlo en una cadena:
 
-// otros ejemplos creados por mi mismo 
+
+// <div>
+//   My JavaScript variable is {String(myVariable)}.
+// </div>
+
+
+
+
+
+
+
+
+// otros ejemplos fuera de la documentacion creados por mi mismo 
 
 import {FeedbackMessage,Header} from './app2.js';
 // import  Header from './app2';
@@ -548,25 +723,7 @@ var clientes = [
 				]
 
 
-ReactDOM.render(<FeedbackMessage  />,document.getElementById('cont15'));
-ReactDOM.render(<Header clientes={clientes} />,document.getElementById('cont16'));
+ReactDOM.render(<FeedbackMessage  />,document.getElementById('cont17'));
+ReactDOM.render(<Header clientes={clientes} />,document.getElementById('cont18'));
 //ReactDOM.render(<FeedbackMessage />,document.getElementById('cont2')); 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
