@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "watchify ./ADVANCED_GUIDES/01_JSX_in_Depth/app.js -v -t [ babelify --presets [ es2015 react] ] -o ./ADVANCED_GUIDES/01_JSX_in_Depth/build.js"
+    "build": "watchify ./ADVANCED_GUIDES/01_JSX_in_Depth/app.js -v -t [ babelify --presets [ es2015 react] ] -o ./ADVANCED_GUIDES/01_JSX_in_Depth/build.js",
+    "build2": "watchify ./ADVANCED_GUIDES/02_Typechecking_With_PropTypes/app.js -v -t [ babelify --presets [ es2015 react] ] -o ./ADVANCED_GUIDES/02_Typechecking_With_PropTypes/build.js"
   },
   "repository": {
     "type": "git",
