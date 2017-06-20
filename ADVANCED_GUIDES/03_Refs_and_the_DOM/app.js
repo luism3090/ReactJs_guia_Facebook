@@ -229,22 +229,133 @@ ReactDOM.render(<CustomTextInput2 />,document.getElementById('cont4'));
 // componentes, pero ocasionalmente puede ser útil para disparar el focus o medir el tamaño o la 
 // posición de un nodo hijo DOM secundario.
 
+// Aunque puede agregar una referencia al componente secundario, esto no es una solución ideal, 
+// ya que sólo obtendría una instancia del componente en lugar de un nodo DOM. Además, esto no funcionaría 
+// con componentes funcionales.
+
+// En cambio, en tales casos recomendamos colocar un prop especial sobre el child. El child tomará 
+// una función prop con un nombre arbitrario (por ejemplo, inputRef) y lo adjuntará al nodo DOM como
+//  un atributo ref. Esto permite que el padre pase su devolución de llamada ref al nodo DOM del child 
+//  a través del componente en el medio.
+
+
+// Esto funciona tanto para las clases como para los componentes funcionales.
+
+
+function CustomTextInput3(props) 
+{
+
+  return (
+    <div>
+    <p>Nombre:<input ref={props.inputRefNombre} placeholder='Nombre' /></p>
+    <p>Apellidos:<input ref={props.inputRefApellidos} placeholder='Apellidos'/></p>
+    </div>
+  );
+}
+
+class Parent2 extends React.Component 
+{
+  render() {
+    return (
+      <CustomTextInput3
+        inputRefNombre={(el) =>{ this.inputElement = el } }
+        inputRefApellidos={(el) =>{ this.inputElement = el } }
+      />
+    );
+  }
+}
+
+ReactDOM.render(<Parent2 />,document.getElementById('cont5'));
+
+
+// En el ejemplo anterior, Parent2 pasa su devolución de llamada de referencia como un argumento inputRef 
+// en CustomTextInput3 y el CustomTextInput3 pasa la misma función que un atributo ref especial a <input>. 
+// Como resultado, this.inputElement en Parent se establecerá en el nodo DOM correspondiente al 
+// elemento <input> en el CustomTextInput3.
+
+// Tenga en cuenta que el nombre de la entrada inputRefNombre en el ejemplo anterior no tiene 
+// ningún significado especial, ya que es un componente regular prop. Sin embargo, utilizando
+// el atributo ref en <input> Es importante, ya que le dice a React que adjunte una referencia 
+// a su nodo DOM.
+
+// Esto funciona aunque CustomTextInput3 sea un componente funcional. A diferencia del atributo ref 
+// especial que sólo se puede especificar para los elementos DOM y para los componentes de la clase,
+// no hay restricciones para los props de componentes comunes como inputRefNombre.
+
+// Otro beneficio de este patrón es que trabaja varios componentes a profundidad. Por ejemplo, 
+// imagine que Parent2 no necesitaba ese nodo DOM, pero un componente que renderio Parent2 
+// (llamémoslo Grandparent) necesitaba acceso a él. Entonces podríamos dejar que el Grandparent 
+// especifique el argumento inputRefNombre en Parent2, y dejar que Parent2 lo "reenvíe" 
+// al CustomTextInput3:
+
+
+function CustomTextInput4(props) {
+  debugger;
+  return (
+    <div>
+      <input ref={props.inputRef} />
+    </div>
+  );
+}
+
+function Parent4(props) {
+  debugger;
+  return (
+    <div>
+      My input: <CustomTextInput4 inputRef={props.inputRef} />
+    </div>
+  );
+}
+
+
+class Grandparent extends React.Component {
+  render() {
+    return (
+      <Parent4
+        inputRef={el => this.inputElement = el}
+      />
+    );
+  }
+}
+
+ReactDOM.render(<Grandparent />,document.getElementById('cont6'));
 
 
 
+// Aquí, la referencia de retorno es especificada por Grandparent. Se pasa al padre como un 
+// prop regular llamado inputRef, y el padre lo pasa a CustomTextInput4 como un prop también. 
+// Por último, el CustomTextInput4 lee el objeto inputRef y asigna la función pasada como un
+// atributo ref al <input>. Como resultado, this.inputElement en Grandparent se establecerá en el
+// nodo DOM correspondiente al elemento <input> en CustomTextInput4;
+
+
+// En todo caso, le recomendamos que no exponga los nodos DOM siempre que sea posible, pero 
+// esto puede ser una escotilla de escape útil. Tenga en cuenta que este enfoque requiere 
+// que agregue algún código al componente secundario. Si no tiene absolutamente ningún control 
+// sobre la implementación de componentes secundarios, su última opción es utilizar 
+// findDOMNode(), pero se desaconseja.
+
+
+// ------------------------- Legacy API: String Refs --------------------------------
+
+
+// Si trabajó con React antes, podría estar familiarizado con una API más antigua donde el 
+// atributo ref es una cadena, como "textInput", y el nodo DOM se accede como this.refs.textInput.
+//  eso lo desaconsejamos porque los refs de la cadena tienen algunos problemas, se consideran 
+//  en desuso y es probable que se eliminen en una de las versiones futuras. Si está utilizando
+//   this.refs.textInput para acceder a refs, le recomendamos usar el patron callback en su lugar.
 
 
 
+// ------------------------ Advertencias --------------------------
 
 
-
-
-
-
-
-
-
-
+// Si el callback ref se define como una función en línea, se llamará dos veces durante 
+// las actualizaciones, primero con nulo y luego de nuevo con el elemento DOM.
+//Esto se debe a que se crea una nueva instancia de la función con cada procesamiento, por
+//    lo que React necesita borrar la referencia antigua y configurar la nueva. Puede evitar
+//     esto definiendo la referencia de retorno como un método enlazado en la clase, pero tenga
+//      en cuenta que no debería importar en la mayoría de los casos.
 
 
 
