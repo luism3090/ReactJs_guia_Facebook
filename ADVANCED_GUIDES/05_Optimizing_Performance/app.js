@@ -80,7 +80,7 @@
 //  compilaciones mucho más lentas. 
 
 
----------------------------------------- Browserify ---------------------------------------------
+// ---------------------------------------- Browserify ---------------------------------------------
 
 
 // Para la generación de producción de Browserify más eficiente, instale algunos complementos:
@@ -292,16 +292,17 @@
 
 
 // Si la única forma en que su componente cambia siempre es cuando cambia la variable props.color o state.count,
-//  podría tener que devolver el valor de compás: 
-
+//  Usted podría usar a shouldComponentUpdate para checarlo:
 
 class CounterButton extends React.Component {
   constructor(props) {
     super(props);
+    //debugger;
     this.state = {count: 1};
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+  	 //debugger;
     if (this.props.color !== nextProps.color) {
       return true;
     }
@@ -312,10 +313,12 @@ class CounterButton extends React.Component {
   }
 
   render() {
+
+  	 //debugger;
     return (
       <button
         color={this.props.color}
-        onClick={() => this.setState(state => ({count: state.count + 1}))} >
+        onClick={() => this.setState( state => ({count: state.count + 1}) ) } >
         Count: {this.state.count}
       </button>
     );
@@ -323,11 +326,203 @@ class CounterButton extends React.Component {
 } 
 
 
+ReactDOM.render(<CounterButton />,document.getElementById('cont1'));
+
+
+// En este código, shouldComponentUpdate sólo está comprobando si hay algún cambio en props.color o state.count. 
+// Si estos valores no cambian, el componente no se actualiza. Si su componente se vuelve más complejo, podría utilizar
+// un patrón similar que hace una "comparación superficial" entre todos los campos de props y estado para
+// determinar si el componente debe actualizarse. Este patrón es bastante común que React proporciona un ayudante 
+// para usar esta lógica - solo hereda de React.PureComponent. Así que este código es una forma más sencilla de 
+// lograr lo mismo: 
+
+
+class CounterButton2 extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {count: 1};
+  }
+
+  render() {
+    return (
+      <button
+        color={this.props.color}
+        onClick={() => this.setState(state => ({count: state.count + 1}))}>
+        Count: {this.state.count}
+      </button>
+    );
+  }
+}
+
+
+ ReactDOM.render(<CounterButton2 />,document.getElementById('cont2'));
+
+
+
+// La mayor parte del tiempo, puede utilizar React.PureComponent en vez de escribir su propio shouldComponentUpdate. 
+// Sólo hace una comparación superficial, por lo que no se puede utilizar si los props o el estado pueden haber sido
+//  mutados de una manera que una comparación superficial se perdería. 
+
+// Esto puede ser un problema con estructuras de datos más complejas. Por ejemplo, supongamos que desea que un 
+// componente ListOfWords muestre una lista de palabras separada por comas, con un componente principal de WordAdder 
+// que le permite hacer clic en un botón para agregar una palabra a la lista. Este código no funciona correctamente: 
+
+
+
+class ListOfWords extends React.PureComponent {
+  render() {
+    // debugger;
+    return <div>{this.props.words.join(',')}</div>;
+  }
+}
+
+class WordAdder extends React.Component {
+  constructor(props) {
+    super(props);
+    // debugger;
+    this.state = {
+      words: ['marklar']
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    // This section is bad style and causes a bug
+    // debugger;
+    const words = this.state.words;
+    words.push('marklar');
+    this.setState({words: words});
+  }
+
+  render() {
+    //debugger;
+    return (
+
+      <div>
+        <button onClick={this.handleClick} >Click</button>
+        <ListOfWords words={this.state.words} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<WordAdder />,document.getElementById('cont3'));
+
+
+// El problema es que PureComponent hará una comparación simple entre los viejos y nuevos valores de this.props.words 
+// Dado que este código modifica las palabras array en el método handleClick de WordAdder, los valores antiguos y nuevos
+//  de this.props.words se compararán como iguales, aunque las palabras reales en la matriz hayan cambiado. Por lo tanto,
+//   el ListOfWords no se actualizará aunque tenga nuevas palabras que se deben renderizar. 
 
 
 
 
+// ------------------------------------- El poder de no mutar datos ------------------------------------------
 
+
+// La forma más sencilla de evitar este problema es evitar mutación de valores que se esten utilizando como objetos o estado. 
+// Por ejemplo, el método handleClick anterior podría volver a escribirse utilizando concat de esta manera:
+
+
+// handleClick() {
+//   this.setState(prevState => ({
+//     words: prevState.words.concat(['marklar'])
+//   }));
+// } 
+
+// ES6 soporta una sintaxis de propagación 'spread syntax '
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator  
+// para arrays que puede hacer esto más fácil. Si utiliza Create React App,
+// esta sintaxis está disponible de forma predeterminada.
+
+
+// handleClick() {
+//   this.setState(prevState => ({
+//     words: [...prevState.words, 'marklar'],
+//   }));
+// };
+
+
+// También puede reescribir el código que muta objetos para evitar la mutación, de manera similar. Por ejemplo, 
+// digamos que tenemos un objeto denominado colormap y queremos escribir una función que cambia el colormap.right a ser 'blue'.
+//  Podríamos escribir:
+
+
+// function updateColorMap(colormap) {
+//   colormap.right = 'blue';
+// }
+
+// Para escribir esto sin modificar el objeto original, podemos usar el método Object.assign:
+
+// function updateColorMap(colormap) {
+//   return Object.assign({}, colormap, {right: 'blue'});
+// }
+
+// UpdateColorMap devuelve un objeto nuevo, en lugar de modificar el antiguo. Object.assign está en ES6 y requiere un polyfill.
+
+// Hay una propuesta de JavaScript para agregar propiedades de propagación de objetos para facilitar 
+// la actualización de objetos sin mutación:
+
+
+// function updateColorMap(colormap) {
+//   return {...colormap, right: 'blue'};
+// }
+
+// Si utiliza Create React App, tanto Object.assign como la sintaxis de extensión de objetos están disponibles de 
+// forma predeterminada.
+
+
+// ----------------------- Uso de estructuras de datos inmutables ------------------------------------
+
+
+// Immutable.js  https://github.com/facebook/immutable-js 
+// es otra manera de resolver este problema. Proporciona colecciones inmutables y persistentes que funcionan
+// a través del intercambio estructural: 
+
+// * Inmutable: una vez creada, una colección no puede ser alterada en otro momento.
+
+// * Persistente: se pueden crear nuevas colecciones a partir de una colección anterior y una mutación como, por ejemplo, 
+// set. La colección original sigue siendo válida una vez creada la nueva colección. 
+
+// * Compartición estructural: se crean nuevas colecciones usando la misma estructura que la colección original, 
+// reduciendo al mínimo la copia para mejorar el rendimiento.
+
+
+// La inmutabilidad hace que los cambios de seguimiento sean baratos. Un cambio siempre dará lugar a un nuevo objeto, 
+// por lo que sólo es necesario comprobar si la referencia al objeto ha cambiado. Por ejemplo, en este código regular de JavaScript:
+
+
+// const x = { foo: 'bar' };
+// const y = x;
+// y.foo = 'baz';
+// x === y; // true
+
+
+// Aunque y fue editado, ya que es una referencia al mismo objeto que x, esta comparación devuelve true.
+//  Puede escribir código similar con immutable.js:
+
+
+// const SomeRecord = Immutable.Record({ foo: null });
+// const x = new SomeRecord({ foo: 'bar' });
+// const y = x.set('foo', 'baz');
+// x === y; // false
+
+
+// En este caso, dado que se devuelve una nueva referencia al mutar x, podemos asumir con seguridad que x ha cambiado. 
+
+
+
+// Otras dos bibliotecas que pueden ayudar a usar datos inmutables son ininterrumpidas-inmutable e inmutabilidad-ayudante.
+//  "seamless-immutable and immutability-helper."
+
+// https://github.com/kolodny/immutability-helper 
+
+// https://github.com/rtfeldman/seamless-immutable
+
+
+// Las estructuras de datos inmutables le brindan una manera barata de realizar un seguimiento de los cambios en los objetos, 
+// que es todo lo que necesitamos para implementar shouldComponentUpdate. Esto a menudo puede proporcionarle un buen 
+// impulso de rendimiento.
 
 
 
